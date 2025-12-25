@@ -2,8 +2,8 @@ import { Injectable, Inject } from '@nestjs/common';
 import { ISummationRepository, ISummationRecord } from '../../core';
 import { SummationQueryDto } from './dto/summation-query.dto';
 import { SummationResultDto } from './dto/summation-result.dto';
-import { Duration } from './enums/duration.enum';
-import { SemanticDuration } from './enums/semantic-duration.enum';
+import { GroupBy } from './enums/group-by.enum';
+import { Period } from './enums/period.enum';
 
 @Injectable()
 export class SummationService {
@@ -13,7 +13,7 @@ export class SummationService {
   ) {}
 
   /**
-   * Calculate sum of amounts grouped by the specified duration
+   * Calculate sum of amounts grouped by the specified period
    */
   async calculateSumByDuration(
     query: SummationQueryDto,
@@ -24,12 +24,12 @@ export class SummationService {
       dateRange.endDate,
     );
 
-    const duration = query.duration || Duration.MONTH;
-    return this.groupAndSum(records, duration);
+    const groupBy = query.groupBy || GroupBy.MONTH;
+    return this.groupAndSum(records, groupBy);
   }
 
   /**
-   * Calculate sum of income (positive values) grouped by duration
+   * Calculate sum of income (positive values) grouped by period
    */
   async getIncomeSumByDuration(
     query: SummationQueryDto,
@@ -41,12 +41,12 @@ export class SummationService {
     );
 
     const incomeRecords = records.filter((record) => record.amount > 0);
-    const duration = query.duration || Duration.MONTH;
-    return this.groupAndSum(incomeRecords, duration);
+    const groupBy = query.groupBy || GroupBy.MONTH;
+    return this.groupAndSum(incomeRecords, groupBy);
   }
 
   /**
-   * Calculate sum of expenses (negative values) grouped by duration
+   * Calculate sum of expenses (negative values) grouped by period
    */
   async getExpensesSumByDuration(
     query: SummationQueryDto,
@@ -58,21 +58,21 @@ export class SummationService {
     );
 
     const expenseRecords = records.filter((record) => record.amount < 0);
-    const duration = query.duration || Duration.MONTH;
-    return this.groupAndSum(expenseRecords, duration);
+    const groupBy = query.groupBy || GroupBy.MONTH;
+    return this.groupAndSum(expenseRecords, groupBy);
   }
 
   /**
-   * Group records by duration and calculate totals
+   * Group records by period and calculate totals
    */
   private groupAndSum(
     records: ISummationRecord[],
-    duration: Duration,
+    groupBy: GroupBy,
   ): SummationResultDto[] {
     const grouped = new Map<string, ISummationRecord[]>();
 
     records.forEach((record) => {
-      const key = this.getPeriodKey(record.date, duration);
+      const key = this.getPeriodKey(record.date, groupBy);
       if (!grouped.has(key)) {
         grouped.set(key, []);
       }
@@ -92,30 +92,30 @@ export class SummationService {
   }
 
   /**
-   * Generate period key based on duration type
+   * Generate period key based on groupBy type
    */
-  private getPeriodKey(date: Date, duration: Duration): string {
+  private getPeriodKey(date: Date, groupBy: GroupBy): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
 
-    switch (duration) {
-      case Duration.DAY:
+    switch (groupBy) {
+      case GroupBy.DAY:
         return `${year}-${month}-${day}`;
 
-      case Duration.WEEK: {
+      case GroupBy.WEEK: {
         const weekNumber = this.getWeekNumber(date);
         return `${year}-W${String(weekNumber).padStart(2, '0')}`;
       }
 
-      case Duration.MONTH:
+      case GroupBy.MONTH:
         return `${year}-${month}`;
 
-      case Duration.YEAR:
+      case GroupBy.YEAR:
         return `${year}`;
 
       default:
-        throw new Error('Unsupported duration');
+        throw new Error('Unsupported groupBy value');
     }
   }
 
@@ -133,14 +133,14 @@ export class SummationService {
   }
 
   /**
-   * Get date range from query (supports semantic durations)
+   * Get date range from query (supports period presets)
    */
   private getDateRange(query: SummationQueryDto): {
     startDate: Date;
     endDate: Date;
   } {
-    if (query.semanticDuration) {
-      return this.getSemanticDateRange(query.semanticDuration);
+    if (query.period) {
+      return this.getPeriodDateRange(query.period);
     }
 
     return {
@@ -150,9 +150,9 @@ export class SummationService {
   }
 
   /**
-   * Convert semantic duration to date range
+   * Convert period preset to date range
    */
-  private getSemanticDateRange(semantic: SemanticDuration): {
+  private getPeriodDateRange(period: Period): {
     startDate: Date;
     endDate: Date;
   } {
@@ -168,15 +168,15 @@ export class SummationService {
       999,
     );
 
-    switch (semantic) {
-      case SemanticDuration.TODAY: {
+    switch (period) {
+      case Period.TODAY: {
         return {
           startDate: new Date(today),
           endDate,
         };
       }
 
-      case SemanticDuration.YESTERDAY: {
+      case Period.YESTERDAY: {
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayEnd = new Date(yesterday);
@@ -187,7 +187,7 @@ export class SummationService {
         };
       }
 
-      case SemanticDuration.THIS_WEEK: {
+      case Period.THIS_WEEK: {
         const dayOfWeek = today.getDay();
         const startOfWeek = new Date(today);
         startOfWeek.setDate(
@@ -199,7 +199,7 @@ export class SummationService {
         };
       }
 
-      case SemanticDuration.LAST_WEEK: {
+      case Period.LAST_WEEK: {
         const dayOfWeek = today.getDay();
         const startOfLastWeek = new Date(today);
         startOfLastWeek.setDate(today.getDate() - dayOfWeek - 6);
@@ -212,7 +212,7 @@ export class SummationService {
         };
       }
 
-      case SemanticDuration.THIS_MONTH: {
+      case Period.THIS_MONTH: {
         const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
         return {
           startDate: startOfMonth,
@@ -220,7 +220,7 @@ export class SummationService {
         };
       }
 
-      case SemanticDuration.LAST_MONTH: {
+      case Period.LAST_MONTH: {
         const startOfLastMonth = new Date(
           today.getFullYear(),
           today.getMonth() - 1,
@@ -238,7 +238,7 @@ export class SummationService {
         };
       }
 
-      case SemanticDuration.THIS_YEAR: {
+      case Period.THIS_YEAR: {
         const startOfYear = new Date(today.getFullYear(), 0, 1);
         return {
           startDate: startOfYear,
@@ -246,7 +246,7 @@ export class SummationService {
         };
       }
 
-      case SemanticDuration.LAST_YEAR: {
+      case Period.LAST_YEAR: {
         const startOfLastYear = new Date(today.getFullYear() - 1, 0, 1);
         const endOfLastYear = new Date(today.getFullYear() - 1, 11, 31);
         endOfLastYear.setHours(23, 59, 59, 999);
@@ -257,7 +257,7 @@ export class SummationService {
       }
 
       default:
-        throw new Error('Unsupported semantic duration');
+        throw new Error('Unsupported period value');
     }
   }
 }

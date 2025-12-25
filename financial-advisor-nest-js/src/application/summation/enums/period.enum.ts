@@ -1,4 +1,4 @@
-export enum SemanticDuration {
+export enum Period {
   TODAY = 'today',
   YESTERDAY = 'yesterday',
   LAST_WEEK = 'lastweek',
