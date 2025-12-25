@@ -118,18 +118,64 @@ export class TransactionRepository implements ISummationRepository {
 
 ## Usage
 
-### API Endpoint
+### API Endpoints
 
+#### 1. Get Total Summation (All Records)
 ```bash
-# Get monthly summation
-GET /summation?duration=month
+# Default: monthly summation of all data
+GET /summation
 
-# Get weekly summation for a date range
-GET /summation?duration=week&startDate=2024-01-01&endDate=2024-12-31
+# With specific duration
+GET /summation?duration=week
 
-# Get daily summation
-GET /summation?duration=day
+# Using semantic duration (today, yesterday, lastweek, lastmonth, lastyear)
+GET /summation?semanticDuration=today
+GET /summation?semanticDuration=lastweek&duration=day
+GET /summation?semanticDuration=lastmonth
+
+# Custom date range
+GET /summation?startDate=2024-01-01&endDate=2024-12-31&duration=month
 ```
+
+#### 2. Get Income Summation (Positive Values Only)
+```bash
+# Monthly income for last month
+GET /summation/income?semanticDuration=lastmonth
+
+# Daily income for this week
+GET /summation/income?semanticDuration=thisweek&duration=day
+
+# Custom date range
+GET /summation/income?startDate=2024-01-01&endDate=2024-12-31
+```
+
+#### 3. Get Expenses Summation (Negative Values Only)
+```bash
+# Monthly expenses for last month
+GET /summation/expenses?semanticDuration=lastmonth
+
+# Daily expenses for today
+GET /summation/expenses?semanticDuration=today&duration=day
+
+# Custom date range
+GET /summation/expenses?startDate=2024-01-01&endDate=2024-12-31
+```
+
+### Supported Semantic Durations
+- `today` - Current day
+- `yesterday` - Previous day
+- `thisweek` - Current week (Monday to today)
+- `lastweek` - Previous week (Monday to Sunday)
+- `thismonth` - Current month (1st to today)
+- `lastmonth` - Previous month (full month)
+- `thisyear` - Current year (Jan 1st to today)
+- `lastyear` - Previous year (full year)
+
+### Supported Grouping Durations
+- `day` - Group by day
+- `week` - Group by ISO week
+- `month` - Group by month (default)
+- `year` - Group by year
 
 ### Response Format
 

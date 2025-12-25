@@ -4,6 +4,7 @@ import { ISummationRecord } from './interfaces/summation-record.interface';
 import { SummationQueryDto } from './dto/summation-query.dto';
 import { SummationResultDto } from './dto/summation-result.dto';
 import { Duration } from './enums/duration.enum';
+import { SemanticDuration } from './enums/semantic-duration.enum';
 
 @Injectable()
 export class SummationService {
@@ -18,12 +19,48 @@ export class SummationService {
   async calculateSumByDuration(
     query: SummationQueryDto,
   ): Promise<SummationResultDto[]> {
+    const dateRange = this.getDateRange(query);
     const records = await this.repository.findByDateRange(
-      query.startDate || new Date(0),
-      query.endDate || new Date(),
+      dateRange.startDate,
+      dateRange.endDate,
     );
 
-    return this.groupAndSum(records, query.duration);
+    const duration = query.duration || Duration.MONTH;
+    return this.groupAndSum(records, duration);
+  }
+
+  /**
+   * Calculate sum of income (positive values) grouped by duration
+   */
+  async getIncomeSumByDuration(
+    query: SummationQueryDto,
+  ): Promise<SummationResultDto[]> {
+    const dateRange = this.getDateRange(query);
+    const records = await this.repository.findByDateRange(
+      dateRange.startDate,
+      dateRange.endDate,
+    );
+
+    const incomeRecords = records.filter((record) => record.amount > 0);
+    const duration = query.duration || Duration.MONTH;
+    return this.groupAndSum(incomeRecords, duration);
+  }
+
+  /**
+   * Calculate sum of expenses (negative values) grouped by duration
+   */
+  async getExpensesSumByDuration(
+    query: SummationQueryDto,
+  ): Promise<SummationResultDto[]> {
+    const dateRange = this.getDateRange(query);
+    const records = await this.repository.findByDateRange(
+      dateRange.startDate,
+      dateRange.endDate,
+    );
+
+    const expenseRecords = records.filter((record) => record.amount < 0);
+    const duration = query.duration || Duration.MONTH;
+    return this.groupAndSum(expenseRecords, duration);
   }
 
   /**
@@ -94,5 +131,134 @@ export class SummationService {
     d.setUTCDate(d.getUTCDate() + 4 - dayNum);
     const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
     return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  }
+
+  /**
+   * Get date range from query (supports semantic durations)
+   */
+  private getDateRange(query: SummationQueryDto): {
+    startDate: Date;
+    endDate: Date;
+  } {
+    if (query.semanticDuration) {
+      return this.getSemanticDateRange(query.semanticDuration);
+    }
+
+    return {
+      startDate: query.startDate || new Date(0),
+      endDate: query.endDate || new Date(),
+    };
+  }
+
+  /**
+   * Convert semantic duration to date range
+   */
+  private getSemanticDateRange(semantic: SemanticDuration): {
+    startDate: Date;
+    endDate: Date;
+  } {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const endDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      23,
+      59,
+      59,
+      999,
+    );
+
+    switch (semantic) {
+      case SemanticDuration.TODAY: {
+        return {
+          startDate: new Date(today),
+          endDate,
+        };
+      }
+
+      case SemanticDuration.YESTERDAY: {
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayEnd = new Date(yesterday);
+        yesterdayEnd.setHours(23, 59, 59, 999);
+        return {
+          startDate: yesterday,
+          endDate: yesterdayEnd,
+        };
+      }
+
+      case SemanticDuration.THIS_WEEK: {
+        const dayOfWeek = today.getDay();
+        const startOfWeek = new Date(today);
+        startOfWeek.setDate(
+          today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1),
+        );
+        return {
+          startDate: startOfWeek,
+          endDate,
+        };
+      }
+
+      case SemanticDuration.LAST_WEEK: {
+        const dayOfWeek = today.getDay();
+        const startOfLastWeek = new Date(today);
+        startOfLastWeek.setDate(today.getDate() - dayOfWeek - 6);
+        const endOfLastWeek = new Date(startOfLastWeek);
+        endOfLastWeek.setDate(endOfLastWeek.getDate() + 6);
+        endOfLastWeek.setHours(23, 59, 59, 999);
+        return {
+          startDate: startOfLastWeek,
+          endDate: endOfLastWeek,
+        };
+      }
+
+      case SemanticDuration.THIS_MONTH: {
+        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        return {
+          startDate: startOfMonth,
+          endDate,
+        };
+      }
+
+      case SemanticDuration.LAST_MONTH: {
+        const startOfLastMonth = new Date(
+          today.getFullYear(),
+          today.getMonth() - 1,
+          1,
+        );
+        const endOfLastMonth = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          0,
+        );
+        endOfLastMonth.setHours(23, 59, 59, 999);
+        return {
+          startDate: startOfLastMonth,
+          endDate: endOfLastMonth,
+        };
+      }
+
+      case SemanticDuration.THIS_YEAR: {
+        const startOfYear = new Date(today.getFullYear(), 0, 1);
+        return {
+          startDate: startOfYear,
+          endDate,
+        };
+      }
+
+      case SemanticDuration.LAST_YEAR: {
+        const startOfLastYear = new Date(today.getFullYear() - 1, 0, 1);
+        const endOfLastYear = new Date(today.getFullYear() - 1, 11, 31);
+        endOfLastYear.setHours(23, 59, 59, 999);
+        return {
+          startDate: startOfLastYear,
+          endDate: endOfLastYear,
+        };
+      }
+
+      default:
+        throw new Error('Unsupported semantic duration');
+    }
   }
 }
