@@ -4,7 +4,7 @@ import { ISummationRecord } from '../interfaces/summation-record.interface';
 
 /**
  * Example implementation using in-memory data
- * Your co-worker will replace this with a real implementation using TypeORM, Prisma, etc.
+ * Todo: Replace this with a real implementation using TypeORM, Prisma, etc.
  */
 @Injectable()
 export class MockSummationRepository implements ISummationRepository {

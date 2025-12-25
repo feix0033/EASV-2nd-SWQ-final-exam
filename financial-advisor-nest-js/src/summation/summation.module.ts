@@ -9,7 +9,7 @@ import { MockSummationRepository } from './repositories/mock-summation.repositor
     SummationService,
     {
       provide: 'ISummationRepository',
-      useClass: MockSummationRepository, // Replace this with the acture implementation.
+      useClass: MockSummationRepository, // Todo: Replace this with the actual implementation
     },
   ],
   exports: [SummationService],

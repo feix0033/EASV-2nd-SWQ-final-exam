@@ -26,8 +26,7 @@ This module follows the **Repository Pattern** and **Dependency Inversion Princi
            ▼
 ┌─────────────────────┐
 │  Repository Impl    │  ← Data access (TypeORM, Prisma, etc.)
-│  (defined by        │
-│  co-worker)         │
+│  (Todo: implement)  │
 └─────────────────────┘
 ```
 
@@ -64,9 +63,9 @@ constructor(
 ) {}
 ```
 
-### 2. Your Co-worker's Responsibility
+### 2. Implementation Todos
 
-Your co-worker needs to:
+Todo: Implement the following to complete the data layer:
 
 1. **Create the actual entity/model** (e.g., with TypeORM):
 ```typescript
@@ -203,7 +202,7 @@ GET /summation/expenses?startDate=2024-01-01&endDate=2024-12-31
 1. **Decoupling**: Service logic is independent of data storage
 2. **Testability**: Easy to mock the repository in tests
 3. **Flexibility**: Can swap out data sources (SQL, NoSQL, API, etc.) without changing service logic
-4. **Team Collaboration**: You can work on business logic while co-worker works on data layer
+4. **Team Collaboration**: Business logic and data layer can be developed independently
 5. **Type Safety**: Interfaces ensure contract compliance
 
 ## Testing Example
