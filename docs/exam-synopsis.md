@@ -1,11 +1,12 @@
 # Synopsis Structure
 
+<!-- template -->
 This is an example of a synopsis structure that you can use for the synopsis in my courses. This document outlines the sections and describes the content of each section.
 
 Adapt it to the scope and topic of your project.
 
 ---
-
+<!-- template -->
 ## 1. Introduction / Motivation
 
 The motivation for picking this particular problem to work on should be clearly communicated in the synopsis. Explain why this problem is interesting for you to work and why it will be interesting for others to read about. Feel free to include any background information that that is required to understand the context of the problem.
@@ -29,6 +30,7 @@ The project combines relevant theory from the course with practical implementati
 
 ---
 
+<!-- template -->
 ## 3. Methodology
 
 In this section you should describe how you intend to analyze and solve the problem. Refer to relevant litterature or videos that contains information that will help you solve the problem.
@@ -39,6 +41,7 @@ And finally: What will confirm or reject your hypothesis?
 
 ---
 
+<!-- template -->
 ## 4. Analysis & Results
 
 This is the meat of your synopsis.
@@ -53,6 +56,7 @@ Demonstrate that you understand the theory and that you can apply it to solve a 
 
 ---
 
+<!-- template -->
 ## 6. Conclusion
 
 Summarize.
