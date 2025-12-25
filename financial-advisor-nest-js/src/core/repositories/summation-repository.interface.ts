@@ -1,4 +1,4 @@
-import { ISummationRecord } from '../domain/summation-record.interface';
+import { ISummationTransaction } from '../domain/summation-transaction.interface';
 
 /**
  * Repository interface for data access
@@ -6,15 +6,15 @@ import { ISummationRecord } from '../domain/summation-record.interface';
  */
 export interface ISummationRepository {
   /**
-   * Find all records within a date range
+   * Find all transactions within a date range
    * @param startDate - Start of the date range
    * @param endDate - End of the date range
-   * @returns Promise of records matching the criteria
+   * @returns Promise of transactions matching the criteria
    */
-  findByDateRange(startDate: Date, endDate: Date): Promise<ISummationRecord[]>;
+  findByDateRange(startDate: Date, endDate: Date): Promise<ISummationTransaction[]>;
 
   /**
-   * Find all records (optional - for getting all data)
+   * Find all transactions (optional - for getting all data)
    */
-  findAll(): Promise<ISummationRecord[]>;
+  findAll(): Promise<ISummationTransaction[]>;
 }

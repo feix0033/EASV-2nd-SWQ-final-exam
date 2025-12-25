@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ISummationRepository, ISummationRecord } from '../../core';
+import { ISummationRepository, ISummationTransaction } from '../../core';
 
 /**
  * Example implementation using in-memory data
@@ -8,7 +8,7 @@ import { ISummationRepository, ISummationRecord } from '../../core';
 @Injectable()
 export class MockSummationRepository implements ISummationRepository {
   // Mock data for demonstration (positive = income, negative = expenses)
-  private mockData: ISummationRecord[] = [
+  private mockData: ISummationTransaction[] = [
     { amount: 100, date: new Date('2024-01-05') }, // income
     { amount: -50, date: new Date('2024-01-07') }, // expense
     { amount: 200, date: new Date('2024-01-12') }, // income
@@ -20,15 +20,15 @@ export class MockSummationRepository implements ISummationRepository {
     { amount: -80, date: new Date('2024-02-20') }, // expense
   ];
 
-  findByDateRange(startDate: Date, endDate: Date): Promise<ISummationRecord[]> {
+  findByDateRange(startDate: Date, endDate: Date): Promise<ISummationTransaction[]> {
     return Promise.resolve(
       this.mockData.filter(
-        (record) => record.date >= startDate && record.date <= endDate,
+        (transaction) => transaction.date >= startDate && transaction.date <= endDate,
       ),
     );
   }
 
-  findAll(): Promise<ISummationRecord[]> {
+  findAll(): Promise<ISummationTransaction[]> {
     return Promise.resolve(this.mockData);
   }
 }

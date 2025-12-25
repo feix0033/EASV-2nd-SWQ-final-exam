@@ -4,7 +4,7 @@
  */
 
 // Domain entities
-export * from './domain/summation-record.interface';
+export * from './domain/summation-transaction.interface';
 
 // Repository interfaces
 export * from './repositories/summation-repository.interface';

@@ -419,6 +419,397 @@ export class AppModule {}
 
 ---
 
+## Implementing ISummationTransaction
+
+The `ISummationTransaction` interface is the domain entity for financial transactions in the summation feature. This section provides guidance on implementing repositories for this interface.
+
+### Interface Definition
+
+**Location:** `src/core/domain/summation-transaction.interface.ts`
+
+```typescript
+export interface ISummationTransaction {
+  amount: number;  // Transaction amount (positive for income, negative for expenses)
+  date: Date;      // Transaction date
+  // Add other fields as needed, but the service only needs these two
+}
+```
+
+### Repository Interface
+
+**Location:** `src/core/repositories/summation-repository.interface.ts`
+
+```typescript
+export interface ISummationRepository {
+  findByDateRange(startDate: Date, endDate: Date): Promise<ISummationTransaction[]>;
+  findAll(): Promise<ISummationTransaction[]>;
+}
+```
+
+### Implementation Strategies
+
+You can implement `ISummationRepository` using different persistence strategies. Here are the most common approaches:
+
+---
+
+#### Strategy 1: Mock Implementation (In-Memory)
+
+**Best for:** Development, testing, and prototyping
+
+**Location:** `src/infrastructure/repositories/mock-summation.repository.ts`
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { ISummationRepository, ISummationTransaction } from '../../core';
+
+@Injectable()
+export class MockSummationRepository implements ISummationRepository {
+  private mockData: ISummationTransaction[] = [
+    { amount: 100, date: new Date('2024-01-05') },
+    { amount: -50, date: new Date('2024-01-07') },
+    { amount: 200, date: new Date('2024-01-12') },
+    { amount: -75, date: new Date('2024-01-15') },
+  ];
+
+  async findByDateRange(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ISummationTransaction[]> {
+    return this.mockData.filter(
+      (transaction) => transaction.date >= startDate && transaction.date <= endDate,
+    );
+  }
+
+  async findAll(): Promise<ISummationTransaction[]> {
+    return this.mockData;
+  }
+}
+```
+
+**Pros:**
+- ✅ Fast and simple
+- ✅ No database setup required
+- ✅ Perfect for testing
+
+**Cons:**
+- ❌ Data lost on restart
+- ❌ Not suitable for production
+
+---
+
+#### Strategy 2: JSON File Storage
+
+**Best for:** Small-scale applications, learning, rapid prototyping
+
+**Location:** `src/infrastructure/repositories/json-summation.repository.ts`
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { ISummationRepository, ISummationTransaction } from '../../core';
+import { JsonStorage } from '../storage/json-storage';
+
+@Injectable()
+export class JsonSummationRepository implements ISummationRepository {
+  private storage: JsonStorage<ISummationTransaction>;
+
+  constructor() {
+    this.storage = new JsonStorage<ISummationTransaction>('summation-transactions.json');
+  }
+
+  async findByDateRange(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ISummationTransaction[]> {
+    const transactions = await this.storage.read();
+    return transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+      return transactionDate >= startDate && transactionDate <= endDate;
+    });
+  }
+
+  async findAll(): Promise<ISummationTransaction[]> {
+    return this.storage.read();
+  }
+
+  // Optional: Add methods for creating transactions
+  async create(transaction: ISummationTransaction): Promise<ISummationTransaction> {
+    const transactions = await this.storage.read();
+    transactions.push({
+      ...transaction,
+      date: new Date(transaction.date),
+    });
+    await this.storage.write(transactions);
+    return transaction;
+  }
+}
+```
+
+**Pros:**
+- ✅ Data persists across restarts
+- ✅ Easy to inspect data (just open JSON file)
+- ✅ No database installation needed
+
+**Cons:**
+- ❌ Not suitable for large datasets
+- ❌ No concurrent access handling
+
+---
+
+#### Strategy 3: TypeORM Implementation (SQL Database)
+
+**Best for:** Production applications with relational database requirements
+
+**Prerequisites:**
+```bash
+npm install @nestjs/typeorm typeorm pg
+```
+
+**Entity:**
+```typescript
+// src/infrastructure/entities/summation-transaction.entity.ts
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity('summation_transactions')
+export class SummationTransactionEntity {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column('decimal', { precision: 10, scale: 2 })
+  amount: number;
+
+  @Column('timestamp')
+  date: Date;
+
+  @Column({ nullable: true })
+  description?: string;
+
+  @Column({ nullable: true })
+  category?: string;
+}
+```
+
+**Repository:**
+```typescript
+// src/infrastructure/repositories/typeorm-summation.repository.ts
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Between } from 'typeorm';
+import { ISummationRepository, ISummationTransaction } from '../../core';
+import { SummationTransactionEntity } from '../entities/summation-transaction.entity';
+
+@Injectable()
+export class TypeOrmSummationRepository implements ISummationRepository {
+  constructor(
+    @InjectRepository(SummationTransactionEntity)
+    private readonly repository: Repository<SummationTransactionEntity>,
+  ) {}
+
+  async findByDateRange(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ISummationTransaction[]> {
+    return this.repository.find({
+      where: {
+        date: Between(startDate, endDate),
+      },
+      order: { date: 'ASC' },
+    });
+  }
+
+  async findAll(): Promise<ISummationTransaction[]> {
+    return this.repository.find({
+      order: { date: 'ASC' },
+    });
+  }
+}
+```
+
+**Module Configuration:**
+```typescript
+// src/infrastructure/infrastructure.module.ts
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { SummationTransactionEntity } from './entities/summation-transaction.entity';
+import { TypeOrmSummationRepository } from './repositories/typeorm-summation.repository';
+
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([SummationTransactionEntity]),
+  ],
+  providers: [
+    {
+      provide: 'ISummationRepository',
+      useClass: TypeOrmSummationRepository,
+    },
+  ],
+  exports: ['ISummationRepository'],
+})
+export class InfrastructureModule {}
+```
+
+**Pros:**
+- ✅ Production-ready
+- ✅ ACID transactions
+- ✅ Advanced querying capabilities
+- ✅ Concurrent access handling
+
+**Cons:**
+- ❌ Requires database setup
+- ❌ More complex configuration
+
+---
+
+#### Strategy 4: Prisma Implementation (Modern ORM)
+
+**Best for:** Modern applications preferring type-safe database access
+
+**Prerequisites:**
+```bash
+npm install @prisma/client
+npm install -D prisma
+npx prisma init
+```
+
+**Prisma Schema:**
+```prisma
+// prisma/schema.prisma
+model SummationTransaction {
+  id          String   @id @default(uuid())
+  amount      Decimal  @db.Decimal(10, 2)
+  date        DateTime
+  description String?
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("summation_transactions")
+}
+```
+
+**Repository:**
+```typescript
+// src/infrastructure/repositories/prisma-summation.repository.ts
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { ISummationRepository, ISummationTransaction } from '../../core';
+
+@Injectable()
+export class PrismaSummationRepository implements ISummationRepository {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async findByDateRange(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ISummationTransaction[]> {
+    const transactions = await this.prisma.summationTransaction.findMany({
+      where: {
+        date: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+      orderBy: { date: 'asc' },
+    });
+
+    return transactions.map((t) => ({
+      amount: Number(t.amount),
+      date: t.date,
+    }));
+  }
+
+  async findAll(): Promise<ISummationTransaction[]> {
+    const transactions = await this.prisma.summationTransaction.findMany({
+      orderBy: { date: 'asc' },
+    });
+
+    return transactions.map((t) => ({
+      amount: Number(t.amount),
+      date: t.date,
+    }));
+  }
+}
+```
+
+**Pros:**
+- ✅ Type-safe database access
+- ✅ Auto-generated types
+- ✅ Excellent developer experience
+- ✅ Database migrations built-in
+
+**Cons:**
+- ❌ Additional build step
+- ❌ Learning curve for Prisma-specific syntax
+
+---
+
+### Switching Between Implementations
+
+The beauty of the repository pattern is that you can easily switch implementations by changing the provider in `infrastructure.module.ts`:
+
+```typescript
+// Switch from Mock to JSON
+{
+  provide: 'ISummationRepository',
+  useClass: JsonSummationRepository,  // Change this line
+}
+
+// Switch to TypeORM
+{
+  provide: 'ISummationRepository',
+  useClass: TypeOrmSummationRepository,  // Or this
+}
+```
+
+**No changes needed in:**
+- ✅ Core layer (interfaces remain the same)
+- ✅ Application layer (services work unchanged)
+- ✅ Controllers (no modifications required)
+
+### Best Practices for Implementation
+
+1. **Keep the interface minimal** - Only add methods that the application layer actually needs
+2. **Use domain types** - Return `ISummationTransaction`, not database entities
+3. **Handle dates carefully** - Ensure dates are properly converted from strings (JSON) or database types
+4. **Add error handling** - Throw meaningful errors for not found, validation failures, etc.
+5. **Consider pagination** - For large datasets, add pagination support to `findByDateRange`
+6. **Maintain consistency** - All implementations should behave identically from the caller's perspective
+
+### Testing Your Implementation
+
+```typescript
+// Example test for any ISummationRepository implementation
+describe('SummationRepository', () => {
+  let repository: ISummationRepository;
+
+  beforeEach(() => {
+    // Initialize your repository (Mock, JSON, TypeORM, etc.)
+    repository = new MockSummationRepository();
+  });
+
+  it('should find transactions by date range', async () => {
+    const startDate = new Date('2024-01-01');
+    const endDate = new Date('2024-01-31');
+
+    const transactions = await repository.findByDateRange(startDate, endDate);
+
+    expect(transactions).toBeDefined();
+    expect(Array.isArray(transactions)).toBe(true);
+    transactions.forEach((t) => {
+      expect(t.date >= startDate && t.date <= endDate).toBe(true);
+    });
+  });
+
+  it('should return all transactions', async () => {
+    const transactions = await repository.findAll();
+
+    expect(transactions).toBeDefined();
+    expect(Array.isArray(transactions)).toBe(true);
+  });
+});
+```
+
+---
+
 ## Common Patterns
 
 ### Pattern 1: Seeding Initial Data
@@ -539,7 +930,7 @@ async findByFilters(filters: {
 src/
 ├── core/
 │   ├── domain/
-│   │   ├── summation-record.interface.ts
+│   │   ├── summation-transaction.interface.ts
 │   │   └── transaction.interface.ts           ✨ NEW
 │   ├── repositories/
 │   │   ├── summation-repository.interface.ts

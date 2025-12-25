@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { ISummationRepository, ISummationRecord } from '../../core';
+import { ISummationRepository, ISummationTransaction } from '../../core';
 import { SummationQueryDto } from './dto/summation-query.dto';
 import { SummationResultDto } from './dto/summation-result.dto';
 import { GroupBy } from './enums/group-by.enum';
@@ -19,13 +19,13 @@ export class SummationService {
     query: SummationQueryDto,
   ): Promise<SummationResultDto[]> {
     const dateRange = this.getDateRange(query);
-    const records = await this.repository.findByDateRange(
+    const transactions = await this.repository.findByDateRange(
       dateRange.startDate,
       dateRange.endDate,
     );
 
     const groupBy = query.groupBy || GroupBy.MONTH;
-    return this.groupAndSum(records, groupBy);
+    return this.groupAndSum(transactions, groupBy);
   }
 
   /**
@@ -35,14 +35,14 @@ export class SummationService {
     query: SummationQueryDto,
   ): Promise<SummationResultDto[]> {
     const dateRange = this.getDateRange(query);
-    const records = await this.repository.findByDateRange(
+    const transactions = await this.repository.findByDateRange(
       dateRange.startDate,
       dateRange.endDate,
     );
 
-    const incomeRecords = records.filter((record) => record.amount > 0);
+    const incomeTransactions = transactions.filter((transaction) => transaction.amount > 0);
     const groupBy = query.groupBy || GroupBy.MONTH;
-    return this.groupAndSum(incomeRecords, groupBy);
+    return this.groupAndSum(incomeTransactions, groupBy);
   }
 
   /**
@@ -52,39 +52,39 @@ export class SummationService {
     query: SummationQueryDto,
   ): Promise<SummationResultDto[]> {
     const dateRange = this.getDateRange(query);
-    const records = await this.repository.findByDateRange(
+    const transactions = await this.repository.findByDateRange(
       dateRange.startDate,
       dateRange.endDate,
     );
 
-    const expenseRecords = records.filter((record) => record.amount < 0);
+    const expenseTransactions = transactions.filter((transaction) => transaction.amount < 0);
     const groupBy = query.groupBy || GroupBy.MONTH;
-    return this.groupAndSum(expenseRecords, groupBy);
+    return this.groupAndSum(expenseTransactions, groupBy);
   }
 
   /**
-   * Group records by period and calculate totals
+   * Group transactions by period and calculate totals
    */
   private groupAndSum(
-    records: ISummationRecord[],
+    transactions: ISummationTransaction[],
     groupBy: GroupBy,
   ): SummationResultDto[] {
-    const grouped = new Map<string, ISummationRecord[]>();
+    const grouped = new Map<string, ISummationTransaction[]>();
 
-    records.forEach((record) => {
-      const key = this.getPeriodKey(record.date, groupBy);
+    transactions.forEach((transaction) => {
+      const key = this.getPeriodKey(transaction.date, groupBy);
       if (!grouped.has(key)) {
         grouped.set(key, []);
       }
-      grouped.get(key)!.push(record);
+      grouped.get(key)!.push(transaction);
     });
 
-    return Array.from(grouped.entries()).map(([period, periodRecords]) => {
-      const dates = periodRecords.map((r) => r.date);
+    return Array.from(grouped.entries()).map(([period, periodTransactions]) => {
+      const dates = periodTransactions.map((t) => t.date);
       return {
         period,
-        total: periodRecords.reduce((sum, r) => sum + r.amount, 0),
-        count: periodRecords.length,
+        total: periodTransactions.reduce((sum, t) => sum + t.amount, 0),
+        count: periodTransactions.length,
         startDate: new Date(Math.min(...dates.map((d) => d.getTime()))),
         endDate: new Date(Math.max(...dates.map((d) => d.getTime()))),
       };
