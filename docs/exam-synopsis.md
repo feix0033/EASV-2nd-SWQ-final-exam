@@ -16,11 +16,15 @@ The synopsis is a short documentation of your project work.
 
 # 2. Problem statement
 
-In this section you should describe the problem you work on. Write a problem statement, of anywhere between 2 and 10 lines, that clearly describes the problem you are working on.
+This project is a personal financial tracking application developed using Nest.js (Node.js). The application allows users to record daily financial transactions, including income and expenses, store the entries locally and calculate financial summaries such as daily totals, income, expenses and profit/loss.
 
-The key here is to be precise and concise.
+The main focus of this project is **software quality and testing**. The application is used as a test project to demonstrate:
+- Unit testing
+- Data-driven unit testing
+- Use of mocking frameworks in a non-.NET environment
+- White-box testing techniques
 
-Be sure to form your problem statement such that it's possible for you to analyze and evaluate the problem. Present the problem in a context that allows you to point out advantages, disadvantages and relate it to theory.
+The project combines relevant theory from the course with practical implementation and testing, showing how testing techniques can be applied in a real-world application.
 
 ---
 
