@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SummationModule } from './summation/summation.module';
+import { SummationModule } from './application/summation/summation.module';
 import { InfrastructureModule } from './infrastructure/infrastructure.module';
 
 /**

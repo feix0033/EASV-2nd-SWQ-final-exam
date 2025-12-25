@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CoreModule } from '../core';
+import { CoreModule } from '../../core';
 import { SummationService } from './summation.service';
 import { SummationController } from './summation.controller';
 
