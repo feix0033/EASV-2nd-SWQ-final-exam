@@ -48,6 +48,9 @@ The project combines relevant theory from the course with practical implementati
 ### Installation
 
 ```bash
+# Navigate to the project directory
+cd financial-advisor-nest-js
+
 # Install dependencies
 npm install
 ```
@@ -55,6 +58,9 @@ npm install
 ## Running the Application
 
 ```bash
+# Make sure you're in the project directory
+cd financial-advisor-nest-js
+
 # Development mode
 npm run start
 
@@ -89,13 +95,16 @@ The Swagger UI provides:
 
 ### Swagger Configuration
 
-The Swagger documentation is configured in `src/main.ts` and uses decorators in controllers to generate comprehensive API documentation automatically.
+The Swagger documentation is configured in `financial-advisor-nest-js/src/main.ts` and uses decorators in controllers to generate comprehensive API documentation automatically.
 
 ## Testing
 
 This project emphasizes comprehensive testing practices:
 
 ```bash
+# Make sure you're in the project directory
+cd financial-advisor-nest-js
+
 # Run unit tests
 npm run test
 
@@ -123,6 +132,9 @@ The project demonstrates:
 ## Code Quality
 
 ```bash
+# Make sure you're in the project directory
+cd financial-advisor-nest-js
+
 # Format code with Prettier
 npm run format
 
