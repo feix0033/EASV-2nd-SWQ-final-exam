@@ -1,4 +1,4 @@
-import { ISummationRecord } from './summation-record.interface';
+import { ISummationRecord } from '../domain/summation-record.interface';
 
 /**
  * Repository interface for data access

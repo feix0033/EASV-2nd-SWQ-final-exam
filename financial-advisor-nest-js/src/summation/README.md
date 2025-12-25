@@ -11,38 +11,41 @@ This project follows **Onion Architecture** (Clean Architecture) principles:
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Infrastructure Layer (src/infrastructure/)             │
-│  - MockSummationRepository                              │
+│  - MockSummationRepository (implements interfaces)      │
 │  - Database implementations (Todo)                      │
 │  - External service integrations (Todo)                 │
 │  ┌───────────────────────────────────────────────────┐  │
-│  │  Application/Domain Layer (src/summation/)       │  │
+│  │  Application Layer (src/summation/)              │  │
 │  │  - Controllers (Presentation)                     │  │
 │  │  - Services (Business Logic)                      │  │
 │  │  - DTOs (Data Transfer Objects)                   │  │
+│  │  - Enums (Duration, SemanticDuration)            │  │
 │  │  ┌─────────────────────────────────────────────┐ │  │
-│  │  │  Core Layer (src/summation/interfaces/)    │ │  │
-│  │  │  - ISummationRecord                         │ │  │
-│  │  │  - ISummationRepository                     │ │  │
-│  │  │  - Enums (Duration, SemanticDuration)      │ │  │
+│  │  │  Core/Domain Layer (src/core/)             │ │  │
+│  │  │  - ISummationRecord (domain entity)        │ │  │
+│  │  │  - ISummationRepository (domain contract)  │ │  │
+│  │  │  - Domain logic and rules                  │ │  │
 │  │  └─────────────────────────────────────────────┘ │  │
 │  └───────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
        ▲
        │ Dependency direction: Outer layers depend on inner layers
-       │ Inner layers have NO knowledge of outer layers
+       │ Core layer has ZERO dependencies on outer layers
 ```
 
 ### Dependency Flow
 
 ```
-InfrastructureModule  ──imports──▶  Interfaces (ISummationRepository)
-                                           ▲
-                                           │
-                                      depends on
-                                           │
-AppModule            ──wires──▶    SummationModule
-(Composition Root)                  (uses ISummationRepository)
+InfrastructureModule ──imports──▶ CoreModule (implements interfaces)
+                                       ▲
+                                       │
+SummationModule      ──imports──▶ CoreModule (uses interfaces)
+                                       ▲
+                                       │
+AppModule (Composition Root)    ──wires all modules together
 ```
+
+All modules depend on `CoreModule`, but `CoreModule` depends on nothing!
 
 ### Key Principles
 
@@ -55,25 +58,32 @@ AppModule            ──wires──▶    SummationModule
 
 ```
 src/
-├── summation/                    # Application/Domain Layer
-│   ├── dto/                      # Data Transfer Objects
-│   │   ├── summation-query.dto.ts
-│   │   └── summation-result.dto.ts
-│   ├── enums/                    # Domain enums
-│   │   ├── duration.enum.ts
-│   │   └── semantic-duration.enum.ts
-│   ├── interfaces/               # Core contracts (innermost layer)
-│   │   ├── summation-record.interface.ts
+├── core/                         # Domain Layer (innermost - most stable)
+│   ├── domain/
+│   │   └── summation-record.interface.ts
+│   ├── repositories/
 │   │   └── summation-repository.interface.ts
-│   ├── summation.controller.ts   # Presentation layer
-│   ├── summation.service.ts      # Business logic
-│   ├── summation.module.ts       # Module configuration
+│   ├── core.module.ts
+│   ├── index.ts                  # Barrel exports
 │   └── README.md
 │
-├── infrastructure/               # Infrastructure Layer (outermost)
+├── summation/                    # Application Layer
+│   ├── dto/
+│   │   ├── summation-query.dto.ts
+│   │   └── summation-result.dto.ts
+│   ├── enums/
+│   │   ├── duration.enum.ts
+│   │   └── semantic-duration.enum.ts
+│   ├── summation.controller.ts
+│   ├── summation.service.ts
+│   ├── summation.module.ts
+│   └── README.md
+│
+├── infrastructure/               # Infrastructure Layer (outermost - most volatile)
 │   ├── repositories/
 │   │   └── mock-summation.repository.ts
-│   └── infrastructure.module.ts  # Infrastructure providers
+│   ├── infrastructure.module.ts
+│   └── README.md
 │
 └── app.module.ts                 # Composition root (wires everything)
 ```

@@ -1,6 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { ISummationRepository } from './interfaces/summation-repository.interface';
-import { ISummationRecord } from './interfaces/summation-record.interface';
+import { ISummationRepository, ISummationRecord } from '../core';
 import { SummationQueryDto } from './dto/summation-query.dto';
 import { SummationResultDto } from './dto/summation-result.dto';
 import { Duration } from './enums/duration.enum';
