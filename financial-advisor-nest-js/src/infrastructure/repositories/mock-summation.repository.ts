@@ -20,10 +20,14 @@ export class MockSummationRepository implements ISummationRepository {
     { amount: -80, date: new Date('2024-02-20') }, // expense
   ];
 
-  findByDateRange(startDate: Date, endDate: Date): Promise<ISummationTransaction[]> {
+  findByDateRange(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ISummationTransaction[]> {
     return Promise.resolve(
       this.mockData.filter(
-        (transaction) => transaction.date >= startDate && transaction.date <= endDate,
+        (transaction) =>
+          transaction.date >= startDate && transaction.date <= endDate,
       ),
     );
   }

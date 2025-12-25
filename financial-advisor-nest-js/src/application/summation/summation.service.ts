@@ -40,7 +40,9 @@ export class SummationService {
       dateRange.endDate,
     );
 
-    const incomeTransactions = transactions.filter((transaction) => transaction.amount > 0);
+    const incomeTransactions = transactions.filter(
+      (transaction) => transaction.amount > 0,
+    );
     const groupBy = query.groupBy || GroupBy.MONTH;
     return this.groupAndSum(incomeTransactions, groupBy);
   }
@@ -57,7 +59,9 @@ export class SummationService {
       dateRange.endDate,
     );
 
-    const expenseTransactions = transactions.filter((transaction) => transaction.amount < 0);
+    const expenseTransactions = transactions.filter(
+      (transaction) => transaction.amount < 0,
+    );
     const groupBy = query.groupBy || GroupBy.MONTH;
     return this.groupAndSum(expenseTransactions, groupBy);
   }

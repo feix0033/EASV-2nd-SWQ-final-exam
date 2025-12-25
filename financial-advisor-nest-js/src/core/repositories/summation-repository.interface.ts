@@ -11,7 +11,10 @@ export interface ISummationRepository {
    * @param endDate - End of the date range
    * @returns Promise of transactions matching the criteria
    */
-  findByDateRange(startDate: Date, endDate: Date): Promise<ISummationTransaction[]>;
+  findByDateRange(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ISummationTransaction[]>;
 
   /**
    * Find all transactions (optional - for getting all data)
