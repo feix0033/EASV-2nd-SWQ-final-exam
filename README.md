@@ -11,6 +11,7 @@ This application serves as a comprehensive solution for tracking daily income an
 This project is a personal financial tracking application developed using Nest.js (Node.js). The application allows users to record daily financial transactions, including income and expenses, store the entries locally and calculate financial summaries such as daily totals, income, expenses and profit/loss.
 
 The main focus of this project is **software quality and testing**. The application is used as a test project to demonstrate:
+
 - Unit testing
 - Data-driven unit testing
 - Use of mocking frameworks in a non-.NET environment
@@ -87,6 +88,7 @@ http://localhost:3000/api
 ```
 
 The Swagger UI provides:
+
 - Interactive API endpoint testing
 - Request/response schemas
 - Example payloads
@@ -124,6 +126,7 @@ npm run test:debug
 ### Testing Approach
 
 The project demonstrates:
+
 - **Unit Testing**: Testing individual components and services in isolation
 - **Data-Driven Testing**: Using parameterized tests to validate multiple scenarios
 - **Mocking**: Utilizing Jest's mocking capabilities to isolate dependencies
@@ -171,6 +174,7 @@ financial-advisor-nest-js/
 ## Academic Context
 
 This project is developed as part of a Software Quality course, specifically focusing on:
+
 - Practical application of testing techniques
 - Implementation of quality assurance processes
 - Demonstration of white-box testing methodologies

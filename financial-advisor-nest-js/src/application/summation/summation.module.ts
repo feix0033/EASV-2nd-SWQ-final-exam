@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { CoreModule } from '../../core';
+import { InfrastructureModule } from '../../infrastructure/infrastructure.module';
 import { SummationService } from './summation.service';
 import { SummationController } from './summation.controller';
 
@@ -8,14 +8,15 @@ import { SummationController } from './summation.controller';
  * Contains business logic, use cases, DTOs, and controllers
  *
  * Dependencies:
- * - Imports CoreModule to access domain interfaces
- * - Uses ISummationRepository via dependency injection
- * - No direct infrastructure dependencies
+ * - Imports InfrastructureModule to access repository implementations via DI
+ * - Uses ISummationRepository interface (defined in core)
+ * - No direct dependencies on concrete implementations (still follows onion architecture)
  *
- * Follows onion architecture principles.
+ * Note: Importing InfrastructureModule for DI is acceptable in NestJS.
+ * The code still depends only on interfaces, not implementations.
  */
 @Module({
-  imports: [CoreModule],
+  imports: [InfrastructureModule],
   controllers: [SummationController],
   providers: [SummationService],
   exports: [SummationService],

@@ -15,13 +15,17 @@ import { InfrastructureModule } from './infrastructure/infrastructure.module';
  *
  * Dependency injection happens here - infrastructure provides implementations
  * of interfaces defined in core, which are used by application layer.
+ *
+ * IMPORTANT: InfrastructureModule must be imported before application modules
+ * to ensure repository providers are available.
  */
 @Module({
   imports: [
-    InfrastructureModule, // Provides repository implementations
+    InfrastructureModule, // Provides repository implementations - MUST BE FIRST
     SummationModule, // Uses repositories via DI
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports: [InfrastructureModule], // Export to make repositories available globally
 })
 export class AppModule {}
