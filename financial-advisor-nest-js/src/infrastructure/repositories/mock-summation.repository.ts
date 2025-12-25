@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ISummationRepository } from '../interfaces/summation-repository.interface';
-import { ISummationRecord } from '../interfaces/summation-record.interface';
+import { ISummationRepository } from '../../summation/interfaces/summation-repository.interface';
+import { ISummationRecord } from '../../summation/interfaces/summation-record.interface';
 
 /**
  * Example implementation using in-memory data

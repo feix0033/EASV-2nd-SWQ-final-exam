@@ -4,49 +4,78 @@ A decoupled service for calculating financial summations grouped by different ti
 
 ## Architecture
 
-This module follows the **Repository Pattern** and **Dependency Inversion Principle** to decouple business logic from data access.
+This project follows **Onion Architecture** (Clean Architecture) principles:
+
+### Onion Architecture Layers
 
 ```
-┌─────────────────────┐
-│   Controller        │  ← HTTP layer
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│   Service           │  ← Business logic (grouping, summing)
-│   (depends on       │
-│   interface only)   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  ISummationRepository│  ← Interface (contract)
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  Repository Impl    │  ← Data access (TypeORM, Prisma, etc.)
-│  (Todo: implement)  │
-└─────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│  Infrastructure Layer (src/infrastructure/)             │
+│  - MockSummationRepository                              │
+│  - Database implementations (Todo)                      │
+│  - External service integrations (Todo)                 │
+│  ┌───────────────────────────────────────────────────┐  │
+│  │  Application/Domain Layer (src/summation/)       │  │
+│  │  - Controllers (Presentation)                     │  │
+│  │  - Services (Business Logic)                      │  │
+│  │  - DTOs (Data Transfer Objects)                   │  │
+│  │  ┌─────────────────────────────────────────────┐ │  │
+│  │  │  Core Layer (src/summation/interfaces/)    │ │  │
+│  │  │  - ISummationRecord                         │ │  │
+│  │  │  - ISummationRepository                     │ │  │
+│  │  │  - Enums (Duration, SemanticDuration)      │ │  │
+│  │  └─────────────────────────────────────────────┘ │  │
+│  └───────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+       ▲
+       │ Dependency direction: Outer layers depend on inner layers
+       │ Inner layers have NO knowledge of outer layers
 ```
+
+### Dependency Flow
+
+```
+InfrastructureModule  ──imports──▶  Interfaces (ISummationRepository)
+                                           ▲
+                                           │
+                                      depends on
+                                           │
+AppModule            ──wires──▶    SummationModule
+(Composition Root)                  (uses ISummationRepository)
+```
+
+### Key Principles
+
+1. **Dependency Inversion**: Inner layers define interfaces, outer layers implement them
+2. **Separation of Concerns**: Each layer has a single responsibility
+3. **Testability**: Business logic is independent of infrastructure
+4. **Flexibility**: Can swap implementations without touching business logic
 
 ## Directory Structure
 
 ```
-summation/
-├── dto/                          # Data Transfer Objects
-│   ├── summation-query.dto.ts    # Input parameters
-│   └── summation-result.dto.ts   # Output format
-├── enums/
-│   └── duration.enum.ts          # Time duration types
-├── interfaces/
-│   ├── summation-record.interface.ts     # Record contract
-│   └── summation-repository.interface.ts # Repository contract
-├── repositories/
-│   └── mock-summation.repository.ts      # Example implementation
-├── summation.controller.ts       # HTTP endpoints
-├── summation.service.ts          # Business logic
-└── summation.module.ts           # Module configuration
+src/
+├── summation/                    # Application/Domain Layer
+│   ├── dto/                      # Data Transfer Objects
+│   │   ├── summation-query.dto.ts
+│   │   └── summation-result.dto.ts
+│   ├── enums/                    # Domain enums
+│   │   ├── duration.enum.ts
+│   │   └── semantic-duration.enum.ts
+│   ├── interfaces/               # Core contracts (innermost layer)
+│   │   ├── summation-record.interface.ts
+│   │   └── summation-repository.interface.ts
+│   ├── summation.controller.ts   # Presentation layer
+│   ├── summation.service.ts      # Business logic
+│   ├── summation.module.ts       # Module configuration
+│   └── README.md
+│
+├── infrastructure/               # Infrastructure Layer (outermost)
+│   ├── repositories/
+│   │   └── mock-summation.repository.ts
+│   └── infrastructure.module.ts  # Infrastructure providers
+│
+└── app.module.ts                 # Composition root (wires everything)
 ```
 
 ## Key Concepts
@@ -65,9 +94,9 @@ constructor(
 
 ### 2. Implementation Todos
 
-Todo: Implement the following to complete the data layer:
+Todo: Implement real infrastructure in `src/infrastructure/`:
 
-1. **Create the actual entity/model** (e.g., with TypeORM):
+1. **Create the actual entity/model** in `src/infrastructure/entities/` (e.g., with TypeORM):
 ```typescript
 @Entity('transactions')
 export class Transaction implements ISummationRecord {
@@ -84,8 +113,9 @@ export class Transaction implements ISummationRecord {
 }
 ```
 
-2. **Implement the repository interface**:
+2. **Implement the repository** in `src/infrastructure/repositories/`:
 ```typescript
+// src/infrastructure/repositories/transaction.repository.ts
 @Injectable()
 export class TransactionRepository implements ISummationRepository {
   constructor(
@@ -107,13 +137,22 @@ export class TransactionRepository implements ISummationRepository {
 }
 ```
 
-3. **Update the module provider**:
+3. **Update infrastructure module** in `src/infrastructure/infrastructure.module.ts`:
 ```typescript
-{
-  provide: 'ISummationRepository',
-  useClass: TransactionRepository, // Replace MockSummationRepository
-}
+@Module({
+  imports: [TypeOrmModule.forFeature([Transaction])],
+  providers: [
+    {
+      provide: 'ISummationRepository',
+      useClass: TransactionRepository, // Replace MockSummationRepository
+    },
+  ],
+  exports: ['ISummationRepository'],
+})
+export class InfrastructureModule {}
 ```
+
+Note: No changes needed in SummationModule - it remains infrastructure-agnostic!
 
 ## Usage
 
