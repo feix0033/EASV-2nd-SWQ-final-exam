@@ -14,8 +14,8 @@ export class AppController {
     description: 'Returns a welcome message',
     schema: {
       type: 'string',
-      example: 'Hello World!'
-    }
+      example: 'Hello World!',
+    },
   })
   getHello(): string {
     return this.appService.getHello();
