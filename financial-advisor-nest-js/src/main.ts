@@ -5,13 +5,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Swagger configuration
+  // Swagger configuration for all API endpoints
   const config = new DocumentBuilder()
-    .setTitle('Financial Advisor API')
-    .setDescription('Personal financial tracking application API documentation')
-    .setVersion('1.0')
-    .addTag('financial-transactions')
-    .build();
+      .setTitle('Financial Advisor API')
+      .setDescription('API documentation for personal finance tracking and summation features')
+      .setVersion('1.0')
+      .addTag('financial-transactions')
+      .addTag('summation')
+      .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
