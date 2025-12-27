@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CoreModule } from '../core';
-import { InMemoryTransactionRepository } from './transactions/in-memory-transaction.repository';
+import { InMemoryTransactionRepository } from './repositories/in-memory-transaction.repository';
 
 /**
  * Infrastructure module - provides concrete implementations of repositories
