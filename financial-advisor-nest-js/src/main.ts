@@ -7,12 +7,14 @@ async function bootstrap() {
 
   // Swagger configuration for all API endpoints
   const config = new DocumentBuilder()
-      .setTitle('Financial Advisor API')
-      .setDescription('API documentation for personal finance tracking and summation features')
-      .setVersion('1.0')
-      .addTag('financial-transactions')
-      .addTag('summation')
-      .build();
+    .setTitle('Financial Advisor API')
+    .setDescription(
+      'API documentation for personal finance tracking and summation features',
+    )
+    .setVersion('1.0')
+    .addTag('financial-transactions')
+    .addTag('summation')
+    .build();
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);

@@ -11,7 +11,7 @@ This is the **innermost layer** in the onion architecture. It contains the domai
 
 ## Current Structure
 
-```
+```text
 core/
 ├── domain/                             # Domain entities
 │   └── summation-record.interface.ts   # Financial record entity
@@ -24,7 +24,7 @@ core/
 
 ## Dependency Rules
 
-```
+```text
 ✗ Core CANNOT depend on:
   - Application layer (summation module)
   - Infrastructure layer

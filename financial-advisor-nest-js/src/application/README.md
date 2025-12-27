@@ -73,7 +73,7 @@ import { BudgetingService } from './budgeting.service';
 import { BudgetingController } from './budgeting.controller';
 
 @Module({
-  imports: [CoreModule],  // Access domain interfaces
+  imports: [CoreModule], // Access domain interfaces
   controllers: [BudgetingController],
   providers: [BudgetingService],
   exports: [BudgetingService],
@@ -89,7 +89,7 @@ export class BudgetingModule {}
   imports: [
     InfrastructureModule,
     SummationModule,
-    BudgetingModule,  // Add new feature
+    BudgetingModule, // Add new feature
   ],
   // ...
 })

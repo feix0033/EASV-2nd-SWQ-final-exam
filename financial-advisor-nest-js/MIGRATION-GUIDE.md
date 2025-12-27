@@ -33,6 +33,7 @@ export interface ITransaction {
 ```
 
 **Principles:**
+
 - ✅ Only domain properties (no database fields like `createdAt`)
 - ✅ Use business terminology (not technical terms)
 - ✅ Keep it simple and focused
@@ -60,6 +61,7 @@ export interface ITransactionRepository {
 ```
 
 **Principles:**
+
 - ✅ Define operations the domain needs
 - ✅ Use domain language (not SQL or database terms)
 - ✅ Return domain entities, not DTOs
@@ -340,7 +342,15 @@ export class TransactionsService {
 
 ```typescript
 // src/application/transactions/transactions.controller.ts
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
@@ -429,8 +439,8 @@ The `ISummationTransaction` interface is the domain entity for financial transac
 
 ```typescript
 export interface ISummationTransaction {
-  amount: number;  // Transaction amount (positive for income, negative for expenses)
-  date: Date;      // Transaction date
+  amount: number; // Transaction amount (positive for income, negative for expenses)
+  date: Date; // Transaction date
   // Add other fields as needed, but the service only needs these two
 }
 ```
@@ -441,7 +451,10 @@ export interface ISummationTransaction {
 
 ```typescript
 export interface ISummationRepository {
-  findByDateRange(startDate: Date, endDate: Date): Promise<ISummationTransaction[]>;
+  findByDateRange(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ISummationTransaction[]>;
   findAll(): Promise<ISummationTransaction[]>;
 }
 ```
@@ -476,7 +489,8 @@ export class MockSummationRepository implements ISummationRepository {
     endDate: Date,
   ): Promise<ISummationTransaction[]> {
     return this.mockData.filter(
-      (transaction) => transaction.date >= startDate && transaction.date <= endDate,
+      (transaction) =>
+        transaction.date >= startDate && transaction.date <= endDate,
     );
   }
 
@@ -487,11 +501,13 @@ export class MockSummationRepository implements ISummationRepository {
 ```
 
 **Pros:**
+
 - ✅ Fast and simple
 - ✅ No database setup required
 - ✅ Perfect for testing
 
 **Cons:**
+
 - ❌ Data lost on restart
 - ❌ Not suitable for production
 
@@ -513,7 +529,9 @@ export class JsonSummationRepository implements ISummationRepository {
   private storage: JsonStorage<ISummationTransaction>;
 
   constructor() {
-    this.storage = new JsonStorage<ISummationTransaction>('summation-transactions.json');
+    this.storage = new JsonStorage<ISummationTransaction>(
+      'summation-transactions.json',
+    );
   }
 
   async findByDateRange(
@@ -532,7 +550,9 @@ export class JsonSummationRepository implements ISummationRepository {
   }
 
   // Optional: Add methods for creating transactions
-  async create(transaction: ISummationTransaction): Promise<ISummationTransaction> {
+  async create(
+    transaction: ISummationTransaction,
+  ): Promise<ISummationTransaction> {
     const transactions = await this.storage.read();
     transactions.push({
       ...transaction,
@@ -545,11 +565,13 @@ export class JsonSummationRepository implements ISummationRepository {
 ```
 
 **Pros:**
+
 - ✅ Data persists across restarts
 - ✅ Easy to inspect data (just open JSON file)
 - ✅ No database installation needed
 
 **Cons:**
+
 - ❌ Not suitable for large datasets
 - ❌ No concurrent access handling
 
@@ -560,11 +582,13 @@ export class JsonSummationRepository implements ISummationRepository {
 **Best for:** Production applications with relational database requirements
 
 **Prerequisites:**
+
 ```bash
 npm install @nestjs/typeorm typeorm pg
 ```
 
 **Entity:**
+
 ```typescript
 // src/infrastructure/entities/summation-transaction.entity.ts
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
@@ -589,6 +613,7 @@ export class SummationTransactionEntity {
 ```
 
 **Repository:**
+
 ```typescript
 // src/infrastructure/repositories/typeorm-summation.repository.ts
 import { Injectable } from '@nestjs/common';
@@ -625,6 +650,7 @@ export class TypeOrmSummationRepository implements ISummationRepository {
 ```
 
 **Module Configuration:**
+
 ```typescript
 // src/infrastructure/infrastructure.module.ts
 import { Module } from '@nestjs/common';
@@ -633,9 +659,7 @@ import { SummationTransactionEntity } from './entities/summation-transaction.ent
 import { TypeOrmSummationRepository } from './repositories/typeorm-summation.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([SummationTransactionEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([SummationTransactionEntity])],
   providers: [
     {
       provide: 'ISummationRepository',
@@ -648,12 +672,14 @@ export class InfrastructureModule {}
 ```
 
 **Pros:**
+
 - ✅ Production-ready
 - ✅ ACID transactions
 - ✅ Advanced querying capabilities
 - ✅ Concurrent access handling
 
 **Cons:**
+
 - ❌ Requires database setup
 - ❌ More complex configuration
 
@@ -664,6 +690,7 @@ export class InfrastructureModule {}
 **Best for:** Modern applications preferring type-safe database access
 
 **Prerequisites:**
+
 ```bash
 npm install @prisma/client
 npm install -D prisma
@@ -671,6 +698,7 @@ npx prisma init
 ```
 
 **Prisma Schema:**
+
 ```prisma
 // prisma/schema.prisma
 model SummationTransaction {
@@ -687,6 +715,7 @@ model SummationTransaction {
 ```
 
 **Repository:**
+
 ```typescript
 // src/infrastructure/repositories/prisma-summation.repository.ts
 import { Injectable } from '@nestjs/common';
@@ -731,12 +760,14 @@ export class PrismaSummationRepository implements ISummationRepository {
 ```
 
 **Pros:**
+
 - ✅ Type-safe database access
 - ✅ Auto-generated types
 - ✅ Excellent developer experience
 - ✅ Database migrations built-in
 
 **Cons:**
+
 - ❌ Additional build step
 - ❌ Learning curve for Prisma-specific syntax
 
@@ -761,6 +792,7 @@ The beauty of the repository pattern is that you can easily switch implementatio
 ```
 
 **No changes needed in:**
+
 - ✅ Core layer (interfaces remain the same)
 - ✅ Application layer (services work unchanged)
 - ✅ Controllers (no modifications required)
@@ -844,7 +876,13 @@ private async seedInitialData(): Promise<void> {
 
 ```typescript
 // Install: npm install class-validator class-transformer
-import { IsNumber, IsString, IsEnum, IsOptional, IsDate } from 'class-validator';
+import {
+  IsNumber,
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsDate,
+} from 'class-validator';
 
 export class CreateTransactionDto {
   @IsNumber()

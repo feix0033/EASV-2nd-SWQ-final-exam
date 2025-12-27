@@ -4,13 +4,13 @@ import { TransactionsService } from './transactions.service';
 import { InMemoryTransactionRepository } from '../../infrastructure/transactions/in-memory-transaction.repository';
 
 @Module({
-    controllers: [TransactionsController],
-    providers: [
-        TransactionsService,
-        {
-            provide: 'TransactionRepository',
-            useClass: InMemoryTransactionRepository,
-        },
-    ],
+  controllers: [TransactionsController],
+  providers: [
+    TransactionsService,
+    {
+      provide: 'TransactionRepository',
+      useClass: InMemoryTransactionRepository,
+    },
+  ],
 })
 export class TransactionsModule {}

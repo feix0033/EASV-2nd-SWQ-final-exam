@@ -36,6 +36,7 @@ Application Layer (Services)
 ### Database Implementation (TypeORM Example)
 
 1. **Create entity** in `infrastructure/entities/`:
+
 ```typescript
 @Entity('transactions')
 export class Transaction implements ISummationRecord {
@@ -51,6 +52,7 @@ export class Transaction implements ISummationRecord {
 ```
 
 2. **Create repository** in `infrastructure/repositories/`:
+
 ```typescript
 @Injectable()
 export class TransactionRepository implements ISummationRepository {
@@ -72,6 +74,7 @@ export class TransactionRepository implements ISummationRepository {
 ```
 
 3. **Update module**:
+
 ```typescript
 @Module({
   imports: [TypeOrmModule.forFeature([Transaction])],

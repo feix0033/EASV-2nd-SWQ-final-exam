@@ -24,9 +24,9 @@ import { TransactionsModule } from './application/transactions/transactions.modu
  */
 @Module({
   imports: [
-    InfrastructureModule,  // Must come first for DI of repository implementations
-    SummationModule,       // Uses repositories via DI
-    TransactionsModule,    // Financial transactions module
+    InfrastructureModule, // Must come first for DI of repository implementations
+    SummationModule, // Uses repositories via DI
+    TransactionsModule, // Financial transactions module
   ],
   controllers: [AppController],
   providers: [AppService],
