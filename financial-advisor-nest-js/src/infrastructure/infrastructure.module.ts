@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CoreModule } from '../core';
-import { MockSummationRepository } from './repositories/mock-summation.repository';
+import { InMemoryTransactionRepository } from './transactions/in-memory-transaction.repository';
 
 /**
  * Infrastructure module - provides concrete implementations of repositories
@@ -10,16 +10,25 @@ import { MockSummationRepository } from './repositories/mock-summation.repositor
  * - Imports CoreModule to access domain interfaces
  * - Implements repository interfaces defined in core
  *
- * Todo: Replace MockSummationRepository with real database implementation (TypeORM, Prisma, etc.)
+ * Current implementation:
+ * - InMemoryTransactionRepository implements both TransactionRepository and ISummationRepository
+ * - Provides a unified data source for Transaction CRUD and Summation features
+ *
+ * Todo: Replace InMemoryTransactionRepository with real database implementation (TypeORM, Prisma, etc.)
  */
 @Module({
   imports: [CoreModule],
   providers: [
+    InMemoryTransactionRepository,
     {
       provide: 'ISummationRepository',
-      useClass: MockSummationRepository,
+      useExisting: InMemoryTransactionRepository,
+    },
+    {
+      provide: 'TransactionRepository',
+      useExisting: InMemoryTransactionRepository,
     },
   ],
-  exports: ['ISummationRepository'],
+  exports: ['ISummationRepository', 'TransactionRepository'],
 })
 export class InfrastructureModule {}

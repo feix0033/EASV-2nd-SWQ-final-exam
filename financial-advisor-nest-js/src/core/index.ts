@@ -5,9 +5,11 @@
 
 // Domain entities
 export * from './domain/summation-transaction.interface';
+export * from './domain/transaction.model';
 
 // Repository interfaces
 export * from './repositories/summation-repository.interface';
+export * from './repositories/transaction-repository.interface';
 
 // Module
 export * from './core.module';
