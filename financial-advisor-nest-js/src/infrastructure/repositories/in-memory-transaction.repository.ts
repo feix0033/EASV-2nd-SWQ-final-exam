@@ -41,11 +41,38 @@ export class InMemoryTransactionRepository
 
   // TransactionRepository methods
   async save(transaction: Transaction): Promise<void> {
-    this.transactions.push(transaction);
+    this.transactions.push({ ...transaction });
   }
 
   async findAll(): Promise<Transaction[]> {
-    return this.transactions;
+    return this.transactions.map((t) => ({ ...t }));
+  }
+
+  async findById(id: string): Promise<Transaction | null> {
+    const transaction = this.transactions.find((t) => t.id === id);
+    return transaction ? { ...transaction } : null;
+  }
+
+  async update(
+    id: string,
+    transactionUpdate: Partial<Transaction>,
+  ): Promise<Transaction | null> {
+    const index = this.transactions.findIndex((t) => t.id === id);
+    if (index === -1) return null;
+
+    this.transactions[index] = {
+      ...this.transactions[index],
+      ...transactionUpdate,
+    };
+    return { ...this.transactions[index] };
+  }
+
+  async delete(id: string): Promise<boolean> {
+    const index = this.transactions.findIndex((t) => t.id === id);
+    if (index === -1) return false;
+
+    this.transactions.splice(index, 1);
+    return true;
   }
 
   // ISummationRepository methods
@@ -53,9 +80,11 @@ export class InMemoryTransactionRepository
     startDate: Date,
     endDate: Date,
   ): Promise<ISummationTransaction[]> {
-    return this.transactions.filter(
-      (transaction) =>
-        transaction.date >= startDate && transaction.date <= endDate,
-    );
+    return this.transactions
+      .filter(
+        (transaction) =>
+          transaction.date >= startDate && transaction.date <= endDate,
+      )
+      .map((t) => ({ ...t }));
   }
 }

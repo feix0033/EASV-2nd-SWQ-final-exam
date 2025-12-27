@@ -6,6 +6,7 @@ import {
   Delete,
   Body,
   Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { randomUUID } from 'crypto';
@@ -67,6 +68,9 @@ export class TransactionsController {
   })
   async findOne(@Param('id') id: string): Promise<TransactionResultDto> {
     const transaction = await this.service.findById(id);
+    if (!transaction) {
+      throw new NotFoundException(`Transaction with id ${id} not found`);
+    }
     return {
       ...transaction,
       date: transaction.date.toISOString(),
@@ -84,7 +88,15 @@ export class TransactionsController {
     @Param('id') id: string,
     @Body() dto: UpdateTransactionDto,
   ): Promise<TransactionResultDto> {
-    const transaction = await this.service.update(id, dto);
+    const updateData: Partial<Transaction> = {
+      ...dto,
+      date: dto.date ? new Date(dto.date) : undefined,
+    };
+
+    const transaction = await this.service.update(id, updateData);
+    if (!transaction) {
+      throw new NotFoundException(`Transaction with id ${id} not found`);
+    }
     return {
       ...transaction,
       date: transaction.date.toISOString(),
@@ -94,7 +106,10 @@ export class TransactionsController {
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a transaction by ID' })
   @ApiResponse({ status: 200, description: 'Transaction deleted' })
-  remove(@Param('id') id: string): Promise<void> {
-    return this.service.delete(id);
+  async remove(@Param('id') id: string): Promise<void> {
+    const deleted = await this.service.delete(id);
+    if (!deleted) {
+      throw new NotFoundException(`Transaction with id ${id} not found`);
+    }
   }
 }

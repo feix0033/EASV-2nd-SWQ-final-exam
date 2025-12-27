@@ -1,7 +1,6 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Transaction } from '../../core/domain/transaction.model';
 import { TransactionRepository } from '../../core/repositories/transaction-repository.interface';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -18,38 +17,18 @@ export class TransactionsService {
     return this.repository.findAll();
   }
 
-  async findById(id: string): Promise<Transaction> {
-    const transactions = await this.repository.findAll();
-    const transaction = transactions.find((t) => t.id === id);
-    if (!transaction) {
-      throw new NotFoundException(`Transaction with id ${id} not found`);
-    }
-    return transaction;
+  async findById(id: string): Promise<Transaction | null> {
+    return this.repository.findById(id);
   }
 
-  async update(id: string, dto: UpdateTransactionDto): Promise<Transaction> {
-    const transactions = await this.repository.findAll();
-    const index = transactions.findIndex((t) => t.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`Transaction with id ${id} not found`);
-    }
-
-    const updatedTransaction = {
-      ...transactions[index],
-      ...dto,
-      date: dto.date ? new Date(dto.date) : transactions[index].date,
-    };
-
-    transactions[index] = updatedTransaction;
-    return updatedTransaction;
+  async update(
+    id: string,
+    data: Partial<Omit<Transaction, 'id'>>,
+  ): Promise<Transaction | null> {
+    return this.repository.update(id, data);
   }
 
-  async delete(id: string): Promise<void> {
-    const transactions = await this.repository.findAll();
-    const index = transactions.findIndex((t) => t.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`Transaction with id ${id} not found`);
-    }
-    transactions.splice(index, 1);
+  async delete(id: string): Promise<boolean> {
+    return this.repository.delete(id);
   }
 }

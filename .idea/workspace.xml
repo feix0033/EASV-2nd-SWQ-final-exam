@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="dd7e805e-c10a-432b-904e-8ca2264c873b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/summation/summation.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/summation/summation.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/src/core/repositories/transaction-repository.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/core/repositories/transaction-repository.interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/src/infrastructure/repositories/in-memory-transaction.repository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/infrastructure/repositories/in-memory-transaction.repository.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +108,7 @@
       <updated>1766870635811</updated>
       <workItem from="1766870637828" duration="106000" />
       <workItem from="1766870752949" duration="633000" />
-      <workItem from="1766871452844" duration="202000" />
+      <workItem from="1766871452844" duration="968000" />
     </task>
     <servers />
   </component>
