@@ -11,8 +11,9 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { randomUUID } from 'crypto';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { Transaction } from '../../core/domain/transaction.model';
+import { TransactionResultDto } from './dto/transaction-result.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { Transaction } from '../../core/domain/transaction.model';
 
 @ApiTags('Transactions')
 @Controller('transactions')
@@ -21,8 +22,12 @@ export class TransactionsController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new transaction' })
-  @ApiResponse({ status: 201, description: 'Transaction created' })
-  create(@Body() dto: CreateTransactionDto): Transaction {
+  @ApiResponse({
+    status: 201,
+    description: 'Transaction created',
+    type: TransactionResultDto,
+  })
+  create(@Body() dto: CreateTransactionDto): TransactionResultDto {
     const transaction: Transaction = {
       id: randomUUID(),
       amount: dto.amount,
@@ -32,31 +37,58 @@ export class TransactionsController {
     };
 
     this.service.add(transaction);
-    return transaction;
+    return {
+      ...transaction,
+      date: transaction.date.toISOString(),
+    };
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all transactions' })
-  @ApiResponse({ status: 200, description: 'List of transactions' })
-  findAll(): Promise<Transaction[]> {
-    return this.service.findAll();
+  @ApiResponse({
+    status: 200,
+    description: 'List of transactions',
+    type: [TransactionResultDto],
+  })
+  async findAll(): Promise<TransactionResultDto[]> {
+    const transactions = await this.service.findAll();
+    return transactions.map((t) => ({
+      ...t,
+      date: t.date.toISOString(),
+    }));
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a transaction by ID' })
-  @ApiResponse({ status: 200, description: 'Transaction found' })
-  findOne(@Param('id') id: string): Promise<Transaction> {
-    return this.service.findById(id);
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction found',
+    type: TransactionResultDto,
+  })
+  async findOne(@Param('id') id: string): Promise<TransactionResultDto> {
+    const transaction = await this.service.findById(id);
+    return {
+      ...transaction,
+      date: transaction.date.toISOString(),
+    };
   }
 
   @Put(':id')
   @ApiOperation({ summary: 'Update a transaction by ID' })
-  @ApiResponse({ status: 200, description: 'Transaction updated' })
-  update(
+  @ApiResponse({
+    status: 200,
+    description: 'Transaction updated',
+    type: TransactionResultDto,
+  })
+  async update(
     @Param('id') id: string,
     @Body() dto: UpdateTransactionDto,
-  ): Promise<Transaction> {
-    return this.service.update(id, dto);
+  ): Promise<TransactionResultDto> {
+    const transaction = await this.service.update(id, dto);
+    return {
+      ...transaction,
+      date: transaction.date.toISOString(),
+    };
   }
 
   @Delete(':id')

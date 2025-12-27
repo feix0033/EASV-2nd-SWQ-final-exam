@@ -55,3 +55,11 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+financial-advisor-nest-js/package-lock.json
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/prettier.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/workspace.xml
+.idea/workspace.xml
+/.idea

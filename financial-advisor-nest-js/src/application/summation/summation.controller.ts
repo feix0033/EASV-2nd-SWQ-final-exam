@@ -1,10 +1,11 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { SummationService } from './summation.service';
 import { GroupBy } from './enums/group-by.enum';
 import { Period } from './enums/period.enum';
+import { SummationResultDto } from './dto/summation-result.dto';
 
-@ApiTags('summation')
+@ApiTags('Summation')
 @Controller('summation')
 export class SummationController {
   constructor(private readonly summationService: SummationService) {}
@@ -17,14 +18,35 @@ export class SummationController {
       'Use period for relative ranges (e.g., "yesterday") OR ' +
       'use startDate/endDate for specific ranges.',
   })
-  @ApiQuery({ name: 'groupBy', enum: GroupBy, required: false })
+  @ApiQuery({
+    name: 'groupBy',
+    enum: GroupBy,
+    required: false,
+    example: 'month',
+  })
   @ApiQuery({
     name: 'period',
     enum: Period,
     required: false,
+    example: 'thismonth',
   })
-  @ApiQuery({ name: 'startDate', type: String, required: false })
-  @ApiQuery({ name: 'endDate', type: String, required: false })
+  @ApiQuery({
+    name: 'startDate',
+    type: String,
+    required: false,
+    example: '2025-01-01',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    type: String,
+    required: false,
+    example: '2025-01-31',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Array of summation results',
+    type: [SummationResultDto],
+  })
   async getSummation(
     @Query('groupBy') groupBy?: GroupBy,
     @Query('period') period?: Period,
@@ -46,14 +68,35 @@ export class SummationController {
       'Calculate sum of positive values (income) grouped by period. ' +
       'Use period for relative ranges OR startDate/endDate for specific ranges.',
   })
-  @ApiQuery({ name: 'groupBy', enum: GroupBy, required: false })
+  @ApiQuery({
+    name: 'groupBy',
+    enum: GroupBy,
+    required: false,
+    example: 'month',
+  })
   @ApiQuery({
     name: 'period',
     enum: Period,
     required: false,
+    example: 'thismonth',
   })
-  @ApiQuery({ name: 'startDate', type: String, required: false })
-  @ApiQuery({ name: 'endDate', type: String, required: false })
+  @ApiQuery({
+    name: 'startDate',
+    type: String,
+    required: false,
+    example: '2025-01-01',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    type: String,
+    required: false,
+    example: '2025-01-31',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Array of income summation results',
+    type: [SummationResultDto],
+  })
   async getIncomeSummation(
     @Query('groupBy') groupBy?: GroupBy,
     @Query('period') period?: Period,
@@ -75,14 +118,35 @@ export class SummationController {
       'Calculate sum of negative values (expenses) grouped by period. ' +
       'Use period for relative ranges OR startDate/endDate for specific ranges.',
   })
-  @ApiQuery({ name: 'groupBy', enum: GroupBy, required: false })
+  @ApiQuery({
+    name: 'groupBy',
+    enum: GroupBy,
+    required: false,
+    example: 'month',
+  })
   @ApiQuery({
     name: 'period',
     enum: Period,
     required: false,
+    example: 'thismonth',
   })
-  @ApiQuery({ name: 'startDate', type: String, required: false })
-  @ApiQuery({ name: 'endDate', type: String, required: false })
+  @ApiQuery({
+    name: 'startDate',
+    type: String,
+    required: false,
+    example: '2025-01-01',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    type: String,
+    required: false,
+    example: '2025-01-31',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Array of expense summation results',
+    type: [SummationResultDto],
+  })
   async getExpensesSummation(
     @Query('groupBy') groupBy?: GroupBy,
     @Query('period') period?: Period,
