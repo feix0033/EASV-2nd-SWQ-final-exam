@@ -13,9 +13,15 @@ This is the **outermost layer** in the onion architecture. It contains all exter
 ```
 infrastructure/
 ├── repositories/
-│   └── mock-summation.repository.ts    # In-memory implementation (for development)
-└── infrastructure.module.ts            # Provides repository implementations
+│   └── in-memory-transaction.repository.ts  # Unified in-memory implementation
+└── infrastructure.module.ts                 # Provides repository implementations
 ```
+
+**Note:** `InMemoryTransactionRepository` implements both:
+- `TransactionRepository` (for Transaction CRUD)
+- `ISummationRepository` (for Summation queries)
+
+This provides a unified data source for all features.
 
 ## Dependency Direction
 
@@ -33,55 +39,96 @@ Application Layer (Services)
 
 ## Adding New Infrastructure
 
-### Database Implementation (TypeORM Example)
+### Replacing In-Memory with Real Database (TypeORM Example)
+
+When ready to implement a real database, follow these steps:
 
 1. **Create entity** in `infrastructure/entities/`:
-```typescript
-@Entity('transactions')
-export class Transaction implements ISummationRecord {
-  @PrimaryGeneratedColumn()
-  id: number;
 
-  @Column('decimal')
+```typescript
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Transaction } from '../../core';
+
+@Entity('transactions')
+export class TransactionEntity implements Transaction {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column('decimal', { precision: 10, scale: 2 })
   amount: number;
+
+  @Column()
+  type: TransactionType;
 
   @Column('timestamp')
   date: Date;
+
+  @Column({ nullable: true })
+  description?: string;
 }
 ```
 
 2. **Create repository** in `infrastructure/repositories/`:
+
 ```typescript
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Between } from 'typeorm';
+import { TransactionRepository, ISummationRepository } from '../../core';
+
 @Injectable()
-export class TransactionRepository implements ISummationRepository {
+export class TypeOrmTransactionRepository
+  implements TransactionRepository, ISummationRepository {
+
   constructor(
-    @InjectRepository(Transaction)
-    private readonly repo: Repository<Transaction>,
+    @InjectRepository(TransactionEntity)
+    private readonly repo: Repository<TransactionEntity>,
   ) {}
 
-  async findByDateRange(startDate: Date, endDate: Date) {
+  // TransactionRepository methods
+  async save(transaction: Transaction): Promise<void> {
+    await this.repo.save(transaction);
+  }
+
+  async findAll(): Promise<Transaction[]> {
+    return this.repo.find();
+  }
+
+  // ISummationRepository methods
+  async findByDateRange(
+    startDate: Date,
+    endDate: Date
+  ): Promise<ISummationTransaction[]> {
     return this.repo.find({
       where: { date: Between(startDate, endDate) },
     });
   }
-
-  async findAll() {
-    return this.repo.find();
-  }
 }
 ```
 
-3. **Update module**:
+3. **Update InfrastructureModule**:
+
 ```typescript
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmTransactionRepository } from './repositories/typeorm-transaction.repository';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([Transaction])],
+  imports: [
+    TypeOrmModule.forFeature([TransactionEntity]),
+  ],
   providers: [
+    TypeOrmTransactionRepository,
     {
       provide: 'ISummationRepository',
-      useClass: TransactionRepository,
+      useExisting: TypeOrmTransactionRepository,
+    },
+    {
+      provide: 'TransactionRepository',
+      useExisting: TypeOrmTransactionRepository,
     },
   ],
-  exports: ['ISummationRepository'],
+  exports: ['ISummationRepository', 'TransactionRepository'],
 })
 export class InfrastructureModule {}
 ```

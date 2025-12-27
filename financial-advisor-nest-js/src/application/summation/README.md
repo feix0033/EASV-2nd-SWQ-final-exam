@@ -107,6 +107,7 @@ constructor(
 Todo: Implement real infrastructure in `src/infrastructure/`:
 
 1. **Create the actual entity/model** in `src/infrastructure/entities/` (e.g., with TypeORM):
+
 ```typescript
 @Entity('transactions')
 export class Transaction implements ISummationRecord {
@@ -124,6 +125,7 @@ export class Transaction implements ISummationRecord {
 ```
 
 2. **Implement the repository** in `src/infrastructure/repositories/`:
+
 ```typescript
 // src/infrastructure/repositories/transaction.repository.ts
 @Injectable()
@@ -133,7 +135,10 @@ export class TransactionRepository implements ISummationRepository {
     private readonly repo: Repository<Transaction>,
   ) {}
 
-  async findByDateRange(startDate: Date, endDate: Date): Promise<ISummationRecord[]> {
+  async findByDateRange(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<ISummationRecord[]> {
     return this.repo.find({
       where: {
         date: Between(startDate, endDate),
@@ -148,6 +153,7 @@ export class TransactionRepository implements ISummationRepository {
 ```
 
 3. **Update infrastructure module** in `src/infrastructure/infrastructure.module.ts`:
+
 ```typescript
 @Module({
   imports: [TypeOrmModule.forFeature([Transaction])],
@@ -169,6 +175,7 @@ Note: No changes needed in SummationModule - it remains infrastructure-agnostic!
 ### API Endpoints
 
 #### 1. Get Total Summation (All Records)
+
 ```bash
 # Default: monthly summation of all data
 GET /summation
@@ -186,6 +193,7 @@ GET /summation?startDate=2024-01-01&endDate=2024-12-31&duration=month
 ```
 
 #### 2. Get Income Summation (Positive Values Only)
+
 ```bash
 # Monthly income for last month
 GET /summation/income?semanticDuration=lastmonth
@@ -198,6 +206,7 @@ GET /summation/income?startDate=2024-01-01&endDate=2024-12-31
 ```
 
 #### 3. Get Expenses Summation (Negative Values Only)
+
 ```bash
 # Monthly expenses for last month
 GET /summation/expenses?semanticDuration=lastmonth
@@ -210,6 +219,7 @@ GET /summation/expenses?startDate=2024-01-01&endDate=2024-12-31
 ```
 
 ### Supported Semantic Durations
+
 - `today` - Current day
 - `yesterday` - Previous day
 - `thisweek` - Current week (Monday to today)
@@ -220,6 +230,7 @@ GET /summation/expenses?startDate=2024-01-01&endDate=2024-12-31
 - `lastyear` - Previous year (full year)
 
 ### Supported Grouping Durations
+
 - `day` - Group by day
 - `week` - Group by ISO week
 - `month` - Group by month (default)

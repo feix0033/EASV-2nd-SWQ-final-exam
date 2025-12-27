@@ -11,20 +11,22 @@ This is the **innermost layer** in the onion architecture. It contains the domai
 
 ## Current Structure
 
-```
+```text
 core/
-├── domain/                             # Domain entities
-│   └── summation-record.interface.ts   # Financial record entity
-├── repositories/                       # Repository contracts
-│   └── summation-repository.interface.ts
-├── core.module.ts                      # Module definition
-├── index.ts                            # Barrel exports
+├── domain/                                  # Domain entities
+│   ├── summation-transaction.interface.ts  # Summation-specific interface
+│   └── transaction.model.ts                # Complete Transaction model
+├── repositories/                            # Repository contracts
+│   ├── summation-repository.interface.ts   # Summation queries
+│   └── transaction-repository.interface.ts # Transaction CRUD
+├── core.module.ts                           # Module definition
+├── index.ts                                 # Barrel exports
 └── README.md
 ```
 
 ## Dependency Rules
 
-```
+```text
 ✗ Core CANNOT depend on:
   - Application layer (summation module)
   - Infrastructure layer
