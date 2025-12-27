@@ -13,13 +13,18 @@ This is the **application/use case layer** in the onion architecture. It contain
 
 ```
 application/
-└── summation/                    # Summation feature
-    ├── dto/                      # Data transfer objects
-    ├── enums/                    # Application-specific enums
-    ├── summation.controller.ts   # HTTP endpoints
-    ├── summation.service.ts      # Business logic
-    ├── summation.module.ts       # Feature module
-    └── README.md
+├── summation/                    # Summation feature
+│   ├── dto/                      # Data transfer objects
+│   ├── enums/                    # Application-specific enums
+│   ├── summation.controller.ts   # HTTP endpoints
+│   ├── summation.service.ts      # Business logic
+│   ├── summation.module.ts       # Feature module
+│   └── README.md
+└── transactions/                 # Transaction CRUD feature
+    ├── dto/                      # DTOs for transactions
+    ├── transactions.controller.ts
+    ├── transactions.service.ts
+    └── transactions.module.ts
 ```
 
 ## Dependency Rules
@@ -63,17 +68,17 @@ application/
     └── README.md
 ```
 
-### 3. Import Core Module
+### 3. Import InfrastructureModule for DI
 
 ```typescript
 // application/budgeting/budgeting.module.ts
 import { Module } from '@nestjs/common';
-import { CoreModule } from '../../core';
+import { InfrastructureModule } from '../../infrastructure/infrastructure.module';
 import { BudgetingService } from './budgeting.service';
 import { BudgetingController } from './budgeting.controller';
 
 @Module({
-  imports: [CoreModule], // Access domain interfaces
+  imports: [InfrastructureModule], // Access repository implementations via DI
   controllers: [BudgetingController],
   providers: [BudgetingService],
   exports: [BudgetingService],
