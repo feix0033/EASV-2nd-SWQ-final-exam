@@ -28,7 +28,9 @@ export class TransactionsController {
     description: 'Transaction created',
     type: TransactionResultDto,
   })
-  create(@Body() dto: CreateTransactionDto): TransactionResultDto {
+  async create(
+    @Body() dto: CreateTransactionDto,
+  ): Promise<TransactionResultDto> {
     const transaction: Transaction = {
       id: randomUUID(),
       amount: dto.amount,
@@ -37,7 +39,8 @@ export class TransactionsController {
       description: dto.description,
     };
 
-    this.service.add(transaction);
+    await this.service.add(transaction);
+
     return {
       ...transaction,
       date: transaction.date.toISOString(),
