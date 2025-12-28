@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd7e805e-c10a-432b-904e-8ca2264c873b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.controller.spec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.service.spec.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/application/transactions/transactions.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/src/core/repositories/transaction-repository.interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/core/repositories/transaction-repository.interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/financial-advisor-nest-js/src/infrastructure/repositories/in-memory-transaction.repository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/financial-advisor-nest-js/src/infrastructure/repositories/in-memory-transaction.repository.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,7 +16,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="49" />
+    <option name="cachedIndexableFilesCount" value="95" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -47,7 +46,7 @@
     <urls />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
@@ -67,7 +66,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "testing/transactions-unit-test",
     "javascript.preferred.runtime.type.id": "node",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.eslint": "true",
@@ -76,7 +75,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "ml.llm.LLMThirdPartyAiProvidersConfigurable",
+    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
     "to.speed.mode.migration.done": "true",
     "ts.external.directory.path": "/home/asyno/Documents/GitHub/EASV-2nd-SWQ-final-exam/financial-advisor-nest-js/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
@@ -109,6 +108,9 @@
       <workItem from="1766870637828" duration="106000" />
       <workItem from="1766870752949" duration="633000" />
       <workItem from="1766871452844" duration="968000" />
+      <workItem from="1766925890732" duration="1163000" />
+      <workItem from="1766937949519" duration="35000" />
+      <workItem from="1766948709057" duration="683000" />
     </task>
     <servers />
   </component>
