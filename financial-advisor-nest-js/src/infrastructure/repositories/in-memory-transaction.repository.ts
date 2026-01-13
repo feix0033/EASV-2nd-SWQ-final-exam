@@ -40,51 +40,54 @@ export class InMemoryTransactionRepository
   ];
 
   // TransactionRepository methods
-  async save(transaction: Transaction): Promise<void> {
+  save(transaction: Transaction): Promise<void> {
     this.transactions.push({ ...transaction });
+    return Promise.resolve();
   }
 
-  async findAll(): Promise<Transaction[]> {
-    return this.transactions.map((t) => ({ ...t }));
+  findAll(): Promise<Transaction[]> {
+    return Promise.resolve(this.transactions.map((t) => ({ ...t })));
   }
 
-  async findById(id: string): Promise<Transaction | null> {
+  findById(id: string): Promise<Transaction | null> {
     const transaction = this.transactions.find((t) => t.id === id);
-    return transaction ? { ...transaction } : null;
+    return Promise.resolve(transaction ? { ...transaction } : null);
   }
 
-  async update(
+  update(
     id: string,
     transactionUpdate: Partial<Transaction>,
   ): Promise<Transaction | null> {
     const index = this.transactions.findIndex((t) => t.id === id);
-    if (index === -1) return null;
+    if (index === -1) return Promise.resolve(null);
 
     this.transactions[index] = {
       ...this.transactions[index],
       ...transactionUpdate,
     };
-    return { ...this.transactions[index] };
+    return Promise.resolve({ ...this.transactions[index] });
   }
 
-  async delete(id: string): Promise<boolean> {
+  delete(id: string): Promise<boolean> {
     const index = this.transactions.findIndex((t) => t.id === id);
-    if (index === -1) return false;
+    if (index === -1) return Promise.resolve(false);
 
     this.transactions.splice(index, 1);
-    return true;
+    return Promise.resolve(true);
   }
 
   // ISummationRepository methods
-  async findByDateRange(
+  findByDateRange(
     startDate: Date,
     endDate: Date,
   ): Promise<ISummationTransaction[]> {
-    return this.transactions
-      .filter(
-        (transaction) =>
-          transaction.date >= startDate && transaction.date <= endDate,
-      )
-      .map((t) => ({ ...t }));
+    return Promise.resolve(
+      this.transactions
+        .filter(
+          (transaction) =>
+            transaction.date >= startDate && transaction.date <= endDate,
+        )
+        .map((t) => ({ ...t })),
+    );
   }
 }

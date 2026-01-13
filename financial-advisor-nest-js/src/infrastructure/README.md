@@ -18,6 +18,7 @@ infrastructure/
 ```
 
 **Note:** `InMemoryTransactionRepository` implements both:
+
 - `TransactionRepository` (for Transaction CRUD)
 - `ISummationRepository` (for Summation queries)
 
@@ -78,8 +79,8 @@ import { TransactionRepository, ISummationRepository } from '../../core';
 
 @Injectable()
 export class TypeOrmTransactionRepository
-  implements TransactionRepository, ISummationRepository {
-
+  implements TransactionRepository, ISummationRepository
+{
   constructor(
     @InjectRepository(TransactionEntity)
     private readonly repo: Repository<TransactionEntity>,
@@ -97,7 +98,7 @@ export class TypeOrmTransactionRepository
   // ISummationRepository methods
   async findByDateRange(
     startDate: Date,
-    endDate: Date
+    endDate: Date,
   ): Promise<ISummationTransaction[]> {
     return this.repo.find({
       where: { date: Between(startDate, endDate) },
@@ -114,9 +115,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmTransactionRepository } from './repositories/typeorm-transaction.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([TransactionEntity]),
-  ],
+  imports: [TypeOrmModule.forFeature([TransactionEntity])],
   providers: [
     TypeOrmTransactionRepository,
     {

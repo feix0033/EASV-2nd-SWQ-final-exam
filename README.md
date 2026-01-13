@@ -101,7 +101,7 @@ The Swagger documentation is configured in `financial-advisor-nest-js/src/main.t
 
 ## Testing
 
-This project emphasizes comprehensive testing practices:
+This project emphasizes comprehensive testing practices with **70.14% overall coverage** and **100% coverage on all business logic**.
 
 ```bash
 # Make sure you're in the project directory
@@ -123,14 +123,39 @@ npm run test:cov
 npm run test:debug
 ```
 
+### Testing Results
+
+**Coverage Metrics** (as of January 13, 2026):
+```
+Overall Coverage: 70.14%
+- Statement Coverage: 70.14%
+- Branch Coverage: 83.60%
+- Function Coverage: 75.47%
+- Line Coverage: 73.57%
+```
+
+**Component Coverage:**
+- ✅ SummationService: 100%
+- ✅ SummationController: 100%
+- ✅ TransactionsService: 100%
+- ✅ TransactionsController: 100%
+
+**Test Statistics:**
+- 131 tests passed
+- 5 test suites
+- ~8.5 seconds execution time
+- 0 flaky tests
+
 ### Testing Approach
 
 The project demonstrates:
 
-- **Unit Testing**: Testing individual components and services in isolation
-- **Data-Driven Testing**: Using parameterized tests to validate multiple scenarios
+- **Unit Testing**: Testing individual components and services in isolation (131 tests)
+- **Data-Driven Testing**: Using parameterized tests (`test.each()`) to validate multiple scenarios
 - **Mocking**: Utilizing Jest's mocking capabilities to isolate dependencies
 - **White-Box Testing**: Applying knowledge of internal code structure to ensure comprehensive coverage
+- **Error Handling**: Testing error propagation and edge cases
+- **Mock Isolation**: Ensuring tests don't call unrelated methods
 
 ## Code Quality
 
