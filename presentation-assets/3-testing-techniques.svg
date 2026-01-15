@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-size: 48px; font-weight: bold; fill: #2c3e50; }
+      .card-title { font-size: 20px; font-weight: bold; fill: white; }
+      .card-content { font-size: 14px; fill: white; }
+      .stat { font-size: 24px; font-weight: bold; fill: white; }
+      .label { font-size: 16px; fill: #2c3e50; }
+    </style>
+  </defs>
+  
+  <rect width="1200" height="900" fill="#ffffff"/>
+  
+  <text x="600" y="60" class="title" text-anchor="middle">Testing Techniques &amp; Approaches</text>
+  
+  <!-- Four Technique Cards -->
+  <rect x="50" y="120" width="250" height="200" fill="#3498db" rx="8"/>
+  <text x="175" y="150" class="card-title" text-anchor="middle">Unit Testing</text>
+  <text x="70" y="180" class="card-content" font-size="13">Test individual</text>
+  <text x="70" y="200" class="card-content" font-size="13">functions and methods</text>
+  <text x="70" y="220" class="card-content" font-size="13">in isolation</text>
+  <text x="70" y="250" class="stat" font-size="18">87 Tests</text>
+  
+  <rect x="330" y="120" width="250" height="200" fill="#27ae60" rx="8"/>
+  <text x="455" y="150" class="card-title" text-anchor="middle">Data-Driven Testing</text>
+  <text x="350" y="180" class="card-content" font-size="13">Test with multiple</text>
+  <text x="350" y="200" class="card-content" font-size="13">input variations and</text>
+  <text x="350" y="220" class="card-content" font-size="13">scenarios</text>
+  <text x="350" y="250" class="stat" font-size="18">7 Variations</text>
+  
+  <rect x="610" y="120" width="250" height="200" fill="#e74c3c" rx="8"/>
+  <text x="735" y="150" class="card-title" text-anchor="middle">Mocking</text>
+  <text x="630" y="180" class="card-content" font-size="13">Mock dependencies</text>
+  <text x="630" y="200" class="card-content" font-size="13">to isolate code under</text>
+  <text x="630" y="220" class="card-content" font-size="13">test</text>
+  <text x="630" y="250" class="stat" font-size="18">32 Mocks</text>
+  
+  <rect x="890" y="120" width="250" height="200" fill="#f39c12" rx="8"/>
+  <text x="1015" y="150" class="card-title" text-anchor="middle">White-Box Testing</text>
+  <text x="910" y="180" class="card-content" font-size="13">Test internal logic</text>
+  <text x="910" y="200" class="card-content" font-size="13">and code paths with</text>
+  <text x="910" y="220" class="card-content" font-size="13">full visibility</text>
+  <text x="910" y="250" class="stat" font-size="18">All Paths</text>
+  
+  <!-- Combined Impact -->
+  <rect x="100" y="380" width="1000" height="150" fill="#34495e" rx="8"/>
+  <text x="120" y="410" class="card-title" font-size="20">Combined Impact</text>
+  
+  <rect x="120" y="430" width="200" height="80" fill="#3498db" rx="5"/>
+  <text x="130" y="450" class="card-title" font-size="18" text-anchor="start">131 Tests</text>
+  <text x="130" y="475" class="card-content" font-size="14">Comprehensive</text>
+  <text x="130" y="495" class="card-content" font-size="14">coverage</text>
+  
+  <rect x="340" y="430" width="200" height="80" fill="#27ae60" rx="5"/>
+  <text x="350" y="450" class="card-title" font-size="18" text-anchor="start">83.6% Coverage</text>
+  <text x="350" y="475" class="card-content" font-size="14">High quality</text>
+  <text x="350" y="495" class="card-content" font-size="14">assurance</text>
+  
+  <rect x="560" y="430" width="200" height="80" fill="#f39c12" rx="5"/>
+  <text x="570" y="450" class="card-title" font-size="18" text-anchor="start">Jest Framework</text>
+  <text x="570" y="475" class="card-content" font-size="14">Integrated testing</text>
+  <text x="570" y="495" class="card-content" font-size="14">infrastructure</text>
+  
+  <rect x="780" y="430" width="200" height="80" fill="#e74c3c" rx="5"/>
+  <text x="790" y="450" class="card-title" font-size="18" text-anchor="start">100% Critical</text>
+  <text x="790" y="475" class="card-content" font-size="14">Essential paths fully</text>
+  <text x="790" y="495" class="card-content" font-size="14">tested</text>
+  
+  <!-- Key Takeaways -->
+  <text x="100" y="600" class="label" font-weight="bold" font-size="18">Key Takeaways:</text>
+  <text x="100" y="630" class="label" font-size="15">✓ Multi-technique approach ensures comprehensive testing  ✓ Combination of strategies covers different aspects</text>
+  <text x="100" y="660" class="label" font-size="15">✓ Data-driven testing validates edge cases  ✓ Mocking isolates units for true unit tests</text>
+  <text x="100" y="690" class="label" font-size="15">✓ White-box testing ensures logic correctness  ✓ Jest provides excellent tooling and reporting</text>
+  <text x="100" y="720" class="label" font-size="15">✓ 83.6% coverage significantly reduces production bugs  ✓ 100% critical coverage ensures stability</text>
+</svg>

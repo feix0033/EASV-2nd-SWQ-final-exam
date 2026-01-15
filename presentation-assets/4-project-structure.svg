@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-size: 48px; font-weight: bold; fill: #2c3e50; }
+      .layer-title { font-size: 22px; font-weight: bold; fill: white; }
+      .layer-content { font-size: 14px; fill: white; }
+      .label { font-size: 16px; fill: #2c3e50; }
+    </style>
+  </defs>
+  
+  <rect width="1200" height="900" fill="#ffffff"/>
+  
+  <text x="600" y="60" class="title" text-anchor="middle">Project Structure &amp; Architecture</text>
+  
+  <!-- Core Layer -->
+  <rect x="100" y="120" width="1000" height="120" fill="#27ae60" rx="8"/>
+  <text x="120" y="150" class="layer-title">Core Layer</text>
+  <text x="120" y="180" class="layer-content">Domain Models &amp; Interfaces | Transaction Model | Summation Transaction Interface</text>
+  <text x="120" y="200" class="layer-content">Repository Contracts | Transaction Repository Interface | Summation Repository Interface</text>
+  
+  <!-- Application Layer -->
+  <rect x="100" y="280" width="1000" height="180" fill="#3498db" rx="8"/>
+  <text x="120" y="310" class="layer-title">Application Layer</text>
+  <text x="120" y="340" class="layer-content">📊 Summation Module: Calculate totals, averages, and summations with grouping and filtering</text>
+  <text x="120" y="365" class="layer-content">   • SummationService (49 tests) | SummationController (38 tests) | Query DTO &amp; Result DTO</text>
+  <text x="120" y="390" class="layer-content">💳 Transactions Module: Full CRUD operations with validation and business logic</text>
+  <text x="120" y="415" class="layer-content">   • TransactionService (20 tests) | TransactionController (20 tests) | DTOs for Create/Update/Result</text>
+  <text x="120" y="440" class="layer-content">✅ E2E Tests (4 scenarios): Integration tests covering complete workflows</text>
+  
+  <!-- Infrastructure Layer -->
+  <rect x="100" y="510" width="1000" height="150" fill="#e74c3c" rx="8"/>
+  <text x="120" y="540" class="layer-title">Infrastructure Layer</text>
+  <text x="120" y="570" class="layer-content">In-Memory Transaction Repository | Database Access Abstraction | Persistence Logic</text>
+  <text x="120" y="595" class="layer-content">DTOs for API Communication | Error Handling &amp; Validation | Cross-cutting Concerns</text>
+  <text x="120" y="620" class="layer-content">Environment Configuration | Logging &amp; Monitoring Setup | Module Integration</text>
+  <text x="120" y="645" class="layer-content">NestJS Framework Integration | Dependency Injection | HTTP Request/Response Handling</text>
+  
+  <!-- Key Features -->
+  <rect x="100" y="720" width="1000" height="130" fill="#ecf0f1" rx="8"/>
+  <text x="120" y="750" class="label" font-weight="bold" font-size="18">🎯 10 Key Features:</text>
+  <text x="120" y="775" class="label" font-size="14">1. Complete CRUD operations  2. Advanced filtering &amp; grouping  3. Data validation  4. Error handling</text>
+  <text x="120" y="800" class="label" font-size="14">5. Type-safe DTOs  6. Comprehensive testing  7. Clean architecture  8. Dependency injection</text>
+  <text x="120" y="825" class="label" font-size="14">9. RESTful API design  10. In-memory data persistence with potential DB upgrade path</text>
+</svg>

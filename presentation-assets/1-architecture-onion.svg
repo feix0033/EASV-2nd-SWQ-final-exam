@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-size: 48px; font-weight: bold; fill: #2c3e50; }
+      .section-title { font-size: 28px; font-weight: bold; fill: white; }
+      .content { font-size: 18px; fill: #2c3e50; }
+      .content-white { font-size: 18px; fill: white; }
+      .benefit { font-size: 16px; fill: #2c3e50; }
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="900" fill="#ffffff"/>
+  
+  <!-- Title -->
+  <text x="600" y="50" class="title" text-anchor="middle">Onion Architecture</text>
+  
+  <!-- Core Layer (innermost) -->
+  <circle cx="600" cy="450" r="120" fill="#27ae60"/>
+  <text x="600" y="445" class="section-title" text-anchor="middle" dy="0.3em">Core Layer</text>
+  <text x="600" y="470" class="content-white" text-anchor="middle" font-size="14">Domain Models</text>
+  
+  <!-- Application Layer -->
+  <circle cx="600" cy="450" r="220" fill="none" stroke="#3498db" stroke-width="3"/>
+  <text x="600" y="250" class="section-title" text-anchor="middle">Application</text>
+  <text x="500" y="275" class="content-white" text-anchor="middle" font-size="14">Services &amp;</text>
+  <text x="500" y="295" class="content-white" text-anchor="middle" font-size="14">Controllers</text>
+  
+  <!-- Infrastructure Layer (outermost) -->
+  <circle cx="600" cy="450" r="320" fill="none" stroke="#e74c3c" stroke-width="3"/>
+  <text x="600" y="130" class="section-title" text-anchor="middle">Infrastructure</text>
+  <text x="500" y="155" class="content-white" text-anchor="middle" font-size="14">Repositories &amp;</text>
+  <text x="500" y="175" class="content-white" text-anchor="middle" font-size="14">Database Access</text>
+  
+  <!-- Benefits Section -->
+  <rect x="100" y="750" width="1000" height="100" fill="#ecf0f1" rx="5"/>
+  <text x="110" y="775" class="section-title" fill="#2c3e50" font-size="20" font-weight="bold">Benefits:</text>
+  <text x="110" y="800" class="benefit">✓ Separation of concerns  ✓ Easy to test  ✓ Independent layers  ✓ Flexible &amp; maintainable</text>
+  <text x="110" y="825" class="benefit">✓ Clear dependencies  ✓ Business logic independent of frameworks</text>
+</svg>

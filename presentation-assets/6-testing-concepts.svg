@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-size: 48px; font-weight: bold; fill: #2c3e50; }
+      .card-title { font-size: 18px; font-weight: bold; fill: white; }
+      .card-content { font-size: 14px; fill: white; }
+      .label { font-size: 16px; fill: #2c3e50; }
+    </style>
+  </defs>
+  
+  <rect width="1200" height="900" fill="#ffffff"/>
+  
+  <text x="600" y="60" class="title" text-anchor="middle">Testing Concepts &amp; Importance</text>
+  
+  <!-- Left Column: Testing Concepts -->
+  <text x="100" y="120" class="label" font-weight="bold" font-size="20">Testing Concepts</text>
+  
+  <rect x="100" y="150" width="450" height="90" fill="#3498db" rx="8"/>
+  <text x="120" y="175" class="card-title">Unit Testing</text>
+  <text x="120" y="200" class="card-content" font-size="13">Testing individual functions</text>
+  <text x="120" y="220" class="card-content" font-size="13">and methods in isolation</text>
+  
+  <rect x="100" y="270" width="450" height="90" fill="#27ae60" rx="8"/>
+  <text x="120" y="295" class="card-title">Mocking &amp; Stubbing</text>
+  <text x="120" y="320" class="card-content" font-size="13">Replacing dependencies with</text>
+  <text x="120" y="340" class="card-content" font-size="13">controlled test doubles</text>
+  
+  <rect x="100" y="390" width="450" height="90" fill="#e74c3c" rx="8"/>
+  <text x="120" y="415" class="card-title">Code Coverage</text>
+  <text x="120" y="440" class="card-content" font-size="13">Measuring percentage of code</text>
+  <text x="120" y="460" class="card-content" font-size="13">executed by tests</text>
+  
+  <rect x="100" y="510" width="450" height="90" fill="#f39c12" rx="8"/>
+  <text x="120" y="535" class="card-title">Data-Driven Testing</text>
+  <text x="120" y="560" class="card-content" font-size="13">Running same test with</text>
+  <text x="120" y="580" class="card-content" font-size="13">multiple input variations</text>
+  
+  <!-- Right Column: Why It Matters -->
+  <text x="650" y="120" class="label" font-weight="bold" font-size="20">Why It Matters</text>
+  
+  <rect x="650" y="150" width="450" height="90" fill="#d5f4e6" rx="8"/>
+  <text x="670" y="175" class="label" font-weight="bold" font-size="16" fill="#27ae60">Reliability</text>
+  <text x="670" y="200" class="label" font-size="13">Tests verify that code works as</text>
+  <text x="670" y="220" class="label" font-size="13">expected in various scenarios</text>
+  
+  <rect x="650" y="270" width="450" height="90" fill="#d6eaf8" rx="8"/>
+  <text x="670" y="295" class="label" font-weight="bold" font-size="16" fill="#3498db">Maintainability</text>
+  <text x="670" y="320" class="label" font-size="13">Tests serve as documentation</text>
+  <text x="670" y="340" class="label" font-size="13">and enable safe refactoring</text>
+  
+  <rect x="650" y="390" width="450" height="90" fill="#fadbd8" rx="8"/>
+  <text x="670" y="415" class="label" font-weight="bold" font-size="16" fill="#e74c3c">Confidence</text>
+  <text x="670" y="440" class="label" font-size="13">High coverage and automation</text>
+  <text x="670" y="460" class="label" font-size="13">enables fearless deployments</text>
+  
+  <rect x="650" y="510" width="450" height="90" fill="#fef5e7" rx="8"/>
+  <text x="670" y="535" class="label" font-weight="bold" font-size="16" fill="#f39c12">Quality Assurance</text>
+  <text x="670" y="560" class="label" font-size="13">Catches bugs early before</text>
+  <text x="670" y="580" class="label" font-size="13">they reach production</text>
+  
+  <!-- Summary Section -->
+  <rect x="100" y="660" width="1000" height="190" fill="#ecf0f1" rx="8"/>
+  <text x="120" y="690" class="label" font-weight="bold" font-size="18">📊 Summary: All 4 Concepts Working Together</text>
+  
+  <text x="120" y="720" class="label" font-size="14">• Unit Testing provides the foundation by testing small, isolated pieces of code with known inputs and expected outputs</text>
+  <text x="120" y="745" class="label" font-size="14">• Mocking &amp; Stubbing isolate the code under test, removing external dependencies and making tests fast and reliable</text>
+  <text x="120" y="770" class="label" font-size="14">• Code Coverage metrics show which parts of the codebase are exercised, identifying gaps in test coverage</text>
+  <text x="120" y="795" class="label" font-size="14">• Data-Driven Testing validates that the code handles various inputs correctly, including edge cases and error conditions</text>
+  <text x="120" y="820" class="label" font-size="14">Together, these approaches create a robust testing strategy that ensures application reliability, maintainability, and quality</text>
+</svg>

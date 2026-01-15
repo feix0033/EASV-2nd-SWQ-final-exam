@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-size: 48px; font-weight: bold; fill: #2c3e50; }
+      .bar-label { font-size: 16px; font-weight: bold; fill: #2c3e50; }
+      .count { font-size: 20px; font-weight: bold; fill: white; }
+      .quality-label { font-size: 14px; fill: white; }
+      .label { font-size: 16px; fill: #2c3e50; }
+    </style>
+  </defs>
+  
+  <rect width="1200" height="900" fill="#ffffff"/>
+  
+  <text x="600" y="60" class="title" text-anchor="middle">Test Distribution by Component</text>
+  
+  <!-- Test Bars with counts -->
+  <text x="100" y="130" class="bar-label">Summation Service</text>
+  <rect x="100" y="150" width="420" height="40" fill="#3498db" rx="5"/>
+  <text x="310" y="177" class="count" text-anchor="middle">49 Tests</text>
+  
+  <text x="100" y="230" class="bar-label">Summation Controller</text>
+  <rect x="100" y="250" width="340" height="40" fill="#27ae60" rx="5"/>
+  <text x="270" y="277" class="count" text-anchor="middle">38 Tests</text>
+  
+  <text x="100" y="330" class="bar-label">Transactions Service</text>
+  <rect x="100" y="350" width="180" height="40" fill="#e74c3c" rx="5"/>
+  <text x="190" y="377" class="count" text-anchor="middle">20 Tests</text>
+  
+  <text x="100" y="430" class="bar-label">Transactions Controller</text>
+  <rect x="100" y="450" width="180" height="40" fill="#f39c12" rx="5"/>
+  <text x="190" y="477" class="count" text-anchor="middle">20 Tests</text>
+  
+  <text x="100" y="530" class="bar-label">E2E Tests</text>
+  <rect x="100" y="550" width="30" height="40" fill="#9b59b6" rx="5"/>
+  <text x="115" y="577" class="count" text-anchor="middle" font-size="16">4</text>
+  
+  <!-- Quality Indicators -->
+  <text x="100" y="650" class="label" font-weight="bold" font-size="18">Coverage Quality Indicators:</text>
+  
+  <rect x="100" y="670" width="220" height="80" fill="#d5f4e6" rx="5"/>
+  <text x="110" y="690" class="label" font-weight="bold">Excellent (80%+)</text>
+  <text x="110" y="710" class="label" font-size="14">Summation Module</text>
+  <text x="110" y="730" class="label" font-size="14">87 tests | High assurance</text>
+  
+  <rect x="340" y="670" width="220" height="80" fill="#d6eaf8" rx="5"/>
+  <text x="350" y="690" class="label" font-weight="bold">Good (60-80%)</text>
+  <text x="350" y="710" class="label" font-size="14">Transactions Module</text>
+  <text x="350" y="730" class="label" font-size="14">40 tests | Solid coverage</text>
+  
+  <rect x="580" y="670" width="220" height="80" fill="#f4ecf7" rx="5"/>
+  <text x="590" y="690" class="label" font-weight="bold">Functional (40-60%)</text>
+  <text x="590" y="710" class="label" font-size="14">E2E Integration</text>
+  <text x="590" y="730" class="label" font-size="14">4 scenarios | Critical paths</text>
+  
+  <rect x="820" y="670" width="280" height="80" fill="#fef9e7" rx="5"/>
+  <text x="830" y="690" class="label" font-weight="bold">Strategic Placement</text>
+  <text x="830" y="710" class="label" font-size="14">100% Critical Components</text>
+  <text x="830" y="730" class="label" font-size="14">Balanced across layers</text>
+</svg>
